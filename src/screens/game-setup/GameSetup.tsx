@@ -1,12 +1,26 @@
 import React, {useState} from 'react';
-import { Button, SafeAreaView, Switch, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  SafeAreaView,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {AmericanScoring, EnglishScoring} from '../../types/scoring/ScoringType';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
   const [playerBName, setPlayerBName] = useState('');
-  const [scoringMethod, setScoringMethod] = useState(false);
+
+  const americanScoring: AmericanScoring = true;
+  const englishScoring: EnglishScoring = false;
+  const [scoringMethod, setScoringMethod] = useState<
+    AmericanScoring | EnglishScoring
+  >(americanScoring);
+
   const [bestOfGames, setBestOfGames] = useState(false);
-  const [pointsPerGame, setPointsPerGame] = useState(false);
+  const [pointsPerGame, setPointsPerGame] = useState(true);
 
   return (
     <>
@@ -33,7 +47,12 @@ const GameSetup = () => {
             <Switch
               value={scoringMethod}
               onValueChange={newValue => {
-                setScoringMethod(newValue);
+                if (newValue === americanScoring) {
+                  console.log(newValue);
+                  setScoringMethod(americanScoring);
+                } else {
+                  setScoringMethod(englishScoring);
+                }
               }}
             />
           </View>
