@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "ios-sim": "react-native run-ios --simulator 6E8E5934-54FE-43E9-88DA-C35559E2EFD7",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
