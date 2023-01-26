@@ -48,7 +48,6 @@ const GameSetup = () => {
               value={scoringMethod}
               onValueChange={newValue => {
                 if (newValue === americanScoring) {
-                  console.log(newValue);
                   setScoringMethod(americanScoring);
                 } else {
                   setScoringMethod(englishScoring);
