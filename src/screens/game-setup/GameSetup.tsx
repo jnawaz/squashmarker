@@ -7,17 +7,11 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {AmericanScoring, EnglishScoring} from '../../types/scoring/ScoringType';
+import ScoringTouchable from '../../components/ScoringTouchable/ScoringTouchable';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
   const [playerBName, setPlayerBName] = useState('');
-
-  const americanScoring: AmericanScoring = true;
-  const englishScoring: EnglishScoring = false;
-  const [scoringMethod, setScoringMethod] = useState<
-    AmericanScoring | EnglishScoring
-  >(americanScoring);
 
   const [bestOfGames, setBestOfGames] = useState(false);
   const [pointsPerGame, setPointsPerGame] = useState(true);
@@ -44,16 +38,7 @@ const GameSetup = () => {
         <View>
           <Text>Scoring method</Text>
           <View>
-            <Switch
-              value={scoringMethod}
-              onValueChange={newValue => {
-                if (newValue === americanScoring) {
-                  setScoringMethod(americanScoring);
-                } else {
-                  setScoringMethod(englishScoring);
-                }
-              }}
-            />
+            <ScoringTouchable />
           </View>
         </View>
         <View>
