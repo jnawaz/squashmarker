@@ -1,20 +1,10 @@
 import React, {useState} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  Switch,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Button, SafeAreaView, Text, TextInput, View} from 'react-native';
 import ScoringTouchable from '../../components/ScoringTouchable/ScoringTouchable';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
   const [playerBName, setPlayerBName] = useState('');
-
-  const [bestOfGames, setBestOfGames] = useState(false);
-  const [pointsPerGame, setPointsPerGame] = useState(true);
 
   return (
     <>
@@ -38,26 +28,23 @@ const GameSetup = () => {
         <View>
           <Text>Scoring method</Text>
           <View>
-            <ScoringTouchable />
+            <ScoringTouchable
+              onEnglishScoringPressed={() => {
+                console.log('english scoring');
+              }}
+              onAmericanScoringPressed={() => {
+                console.log('american scoring');
+              }}
+            />
           </View>
         </View>
         <View>
           <Text>Best of (3 / 5) games</Text>
-          <Switch
-            value={bestOfGames}
-            onValueChange={updatedBestOfGames => {
-              setBestOfGames(updatedBestOfGames);
-            }}
-          />
+          {/* //TODO: build number of games component */}
         </View>
         <View>
           <Text>Points per game</Text>
-          <Switch
-            value={pointsPerGame}
-            onValueChange={updatedPointsPerGame => {
-              setPointsPerGame(updatedPointsPerGame);
-            }}
-          />
+          {/* //TODO: build points per game component*/}
         </View>
         <View>
           <Button title={'Start game'} />

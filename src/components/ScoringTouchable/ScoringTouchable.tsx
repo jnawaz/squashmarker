@@ -1,18 +1,20 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-const ScoringTouchable = () => {
+type ScoringTouchableProps = {
+  onAmericanScoringPressed: () => void | undefined;
+  onEnglishScoringPressed: () => void | undefined;
+};
+
+const ScoringTouchable = (props: ScoringTouchableProps) => {
   return (
     <>
       <View>
-        <TouchableOpacity>
-          <Text>To 11</Text>
+        <TouchableOpacity onPressIn={props.onAmericanScoringPressed}>
+          <Text>American Scoring</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>To 15</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>To 9</Text>
+        <TouchableOpacity onPressIn={props.onEnglishScoringPressed}>
+          <Text>English Scoring</Text>
         </TouchableOpacity>
       </View>
     </>
