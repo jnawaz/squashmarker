@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, SafeAreaView, Text, TextInput, View} from 'react-native';
-import ScoringTouchable from '../../components/ScoringTouchable/ScoringTouchable';
+import BaseTouchable from '../../components/BaseTouchable/BaseTouchable';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
@@ -28,23 +28,38 @@ const GameSetup = () => {
         <View>
           <Text>Scoring method</Text>
           <View>
-            <ScoringTouchable
-              onEnglishScoringPressed={() => {
-                console.log('english scoring');
-              }}
-              onAmericanScoringPressed={() => {
-                console.log('american scoring');
-              }}
+            <BaseTouchable
+              buttons={[
+                {text: 'American scoring', onPress: () => {}},
+                {text: 'English scoring', onPress: () => {}},
+              ]}
             />
           </View>
         </View>
         <View>
           <Text>Best of (3 / 5) games</Text>
-          {/* //TODO: build number of games component */}
+          <BaseTouchable
+            buttons={[
+              {
+                text: 'Best of 3',
+                onPress: () => {},
+              },
+              {
+                text: 'Best of 3',
+                onPress: () => {},
+              },
+            ]}
+          />
         </View>
         <View>
           <Text>Points per game</Text>
-          {/* //TODO: build points per game component*/}
+          <BaseTouchable
+            buttons={[
+              {text: '15 points', onPress: () => {}},
+              {text: '11 points', onPress: () => {}},
+              {text: '9 points', onPress: () => {}},
+            ]}
+          />
         </View>
         <View>
           <Button title={'Start game'} />
