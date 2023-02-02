@@ -3,10 +3,36 @@ import {Button, SafeAreaView, Text, TextInput, View} from 'react-native';
 import BaseTouchable from '../../components/BaseTouchable/BaseTouchable';
 import {styles} from './GameSetup.style';
 import {globalStyle} from '../../globals/styles/Global.style';
+import {ScoringMethod} from '../../types/scoring/ScoringMethod';
+import {BestOfGames} from '../../types/games/BestOfGames';
+import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
   const [playerBName, setPlayerBName] = useState('');
+  const [scoringMethod, setScoringMethod] = useState<ScoringMethod>();
+  const [bestOfGames, setBestOfGames] = useState<BestOfGames>();
+  const [pointsPerGame, setPointsPerGame] = useState<PointsPerGame>();
+
+  function pointsTo15() {
+    return pointsPerGame === PointsPerGame.PointsTo15;
+  }
+
+  const americanTo15 = () => {
+    return isAmericanScoring() && pointsTo15();
+  };
+
+  function isEnglishScoring() {
+    return scoringMethod === ScoringMethod.EnglishScoring;
+  }
+
+  function americanTo11() {
+    return isAmericanScoring() && pointsPerGame === PointsPerGame.PointsTo11;
+  }
+
+  function isAmericanScoring() {
+    return scoringMethod === ScoringMethod.AmericanScoring;
+  }
 
   return (
     <>
@@ -35,8 +61,20 @@ const GameSetup = () => {
           <View>
             <BaseTouchable
               buttons={[
-                {text: 'American scoring', onPress: () => {}},
-                {text: 'English scoring', onPress: () => {}},
+                {
+                  text: 'American scoring',
+                  onPress: () => {
+                    setScoringMethod(ScoringMethod.AmericanScoring);
+                  },
+                  isDisabled: isEnglishScoring(),
+                },
+                {
+                  text: 'English scoring',
+                  onPress: () => {
+                    setScoringMethod(ScoringMethod.EnglishScoring);
+                  },
+                  isDisabled: isAmericanScoring(),
+                },
               ]}
             />
           </View>
@@ -47,11 +85,17 @@ const GameSetup = () => {
             buttons={[
               {
                 text: 'Best of 3',
-                onPress: () => {},
+                onPress: () => {
+                  setBestOfGames(BestOfGames.BestOf3);
+                },
+                isDisabled: bestOfGames === BestOfGames.BestOf5,
               },
               {
                 text: 'Best of 5',
-                onPress: () => {},
+                onPress: () => {
+                  setBestOfGames(BestOfGames.BestOf5);
+                },
+                isDisabled: bestOfGames === BestOfGames.BestOf3,
               },
             ]}
           />
@@ -60,9 +104,27 @@ const GameSetup = () => {
           <Text style={globalStyle.textHeading}>Points per game</Text>
           <BaseTouchable
             buttons={[
-              {text: '15 points', onPress: () => {}},
-              {text: '11 points', onPress: () => {}},
-              {text: '9 points', onPress: () => {}},
+              {
+                text: '15 points',
+                onPress: () => {
+                  setPointsPerGame(PointsPerGame.PointsTo15);
+                },
+                isDisabled: isEnglishScoring() || americanTo11(),
+              },
+              {
+                text: '11 points',
+                onPress: () => {
+                  setPointsPerGame(PointsPerGame.PointsTo11);
+                },
+                isDisabled: isEnglishScoring() || americanTo15(),
+              },
+              {
+                text: '9 points',
+                onPress: () => {
+                  setPointsPerGame(PointsPerGame.PointsTo9);
+                },
+                isDisabled: isAmericanScoring(),
+              },
             ]}
           />
         </View>

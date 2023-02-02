@@ -11,7 +11,7 @@ const BaseTouchable = (props: BaseTouchableProps) => {
   props.buttons.forEach(function (button, index) {
     buttons.push(
       <TouchableOpacity
-        style={styles.button}
+        style={button.isDisabled ? styles.isDisabled : styles.button}
         key={index}
         onPress={(props.buttons[index] as BaseTouchableButtons).onPress}>
         <Text style={styles.buttonText}>
