@@ -1,15 +1,10 @@
 import React from 'react';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './BaseTouchable.style';
-
-export type BaseTouchableProps = {
-  buttons: Array<BaseTouchableButtons>;
-};
-
-export type BaseTouchableButtons = {
-  text: string;
-  onPress: () => void;
-};
+import {
+  BaseTouchableButtons,
+  BaseTouchableProps,
+} from '../../types/base-touchable/BaseTouchable';
 
 const BaseTouchable = (props: BaseTouchableProps) => {
   let buttons: [object?] = [];
