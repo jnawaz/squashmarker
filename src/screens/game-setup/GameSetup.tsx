@@ -67,6 +67,7 @@ const GameSetup = () => {
                     setScoringMethod(ScoringMethod.AmericanScoring);
                   },
                   isDisabled: isEnglishScoring(),
+                  testId: 'btn-americanScoring',
                 },
                 {
                   text: 'English scoring',
@@ -74,6 +75,7 @@ const GameSetup = () => {
                     setScoringMethod(ScoringMethod.EnglishScoring);
                   },
                   isDisabled: isAmericanScoring(),
+                  testId: 'btn-englishScoring',
                 },
               ]}
             />
@@ -89,6 +91,7 @@ const GameSetup = () => {
                   setBestOfGames(BestOfGames.BestOf3);
                 },
                 isDisabled: bestOfGames === BestOfGames.BestOf5,
+                testId: 'btn-bestOf3',
               },
               {
                 text: 'Best of 5',
@@ -96,6 +99,7 @@ const GameSetup = () => {
                   setBestOfGames(BestOfGames.BestOf5);
                 },
                 isDisabled: bestOfGames === BestOfGames.BestOf3,
+                testId: 'btn-bestOf5',
               },
             ]}
           />
@@ -110,6 +114,7 @@ const GameSetup = () => {
                   setPointsPerGame(PointsPerGame.PointsTo15);
                 },
                 isDisabled: isEnglishScoring() || americanTo11(),
+                testId: 'btn-15Points',
               },
               {
                 text: '11 points',
@@ -117,6 +122,7 @@ const GameSetup = () => {
                   setPointsPerGame(PointsPerGame.PointsTo11);
                 },
                 isDisabled: isEnglishScoring() || americanTo15(),
+                testId: 'btn-11Points',
               },
               {
                 text: '9 points',
@@ -124,6 +130,7 @@ const GameSetup = () => {
                   setPointsPerGame(PointsPerGame.PointsTo9);
                 },
                 isDisabled: isAmericanScoring(),
+                testId: 'btn-9Points',
               },
             ]}
           />

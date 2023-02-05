@@ -6,4 +6,5 @@ export type BaseTouchableButtons = {
   text: string;
   onPress: () => void;
   isDisabled: boolean | undefined;
+  testId: string;
 };

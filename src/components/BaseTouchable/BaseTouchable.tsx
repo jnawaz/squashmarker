@@ -13,7 +13,8 @@ const BaseTouchable = (props: BaseTouchableProps) => {
       <TouchableOpacity
         style={button.isDisabled ? styles.isDisabled : styles.button}
         key={index}
-        onPress={(props.buttons[index] as BaseTouchableButtons).onPress}>
+        onPress={(props.buttons[index] as BaseTouchableButtons).onPress}
+        testID={button.testId}>
         <Text style={styles.buttonText}>
           {(button as BaseTouchableButtons).text}
         </Text>
