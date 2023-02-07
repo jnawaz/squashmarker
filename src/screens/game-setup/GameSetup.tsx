@@ -14,25 +14,25 @@ const GameSetup = () => {
   const [bestOfGames, setBestOfGames] = useState<BestOfGames>();
   const [pointsPerGame, setPointsPerGame] = useState<PointsPerGame>();
 
-  function pointsTo15() {
+  const pointsTo15 = () => {
     return pointsPerGame === PointsPerGame.PointsTo15;
-  }
+  };
 
   const americanTo15 = () => {
     return isAmericanScoring() && pointsTo15();
   };
 
-  function isEnglishScoring() {
+  const isEnglishScoring = () => {
     return scoringMethod === ScoringMethod.EnglishScoring;
-  }
+  };
 
-  function americanTo11() {
+  const americanTo11 = () => {
     return isAmericanScoring() && pointsPerGame === PointsPerGame.PointsTo11;
-  }
+  };
 
-  function isAmericanScoring() {
+  const isAmericanScoring = () => {
     return scoringMethod === ScoringMethod.AmericanScoring;
-  }
+  };
 
   return (
     <>

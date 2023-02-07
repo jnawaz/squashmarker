@@ -11,6 +11,8 @@ describe('<GameSetup />', () => {
   const btn_americanScoring = 'btn-americanScoring';
   const btn_englishScoring = 'btn-englishScoring';
   const btn_ninePoints = 'btn-9Points';
+  const btn_11Points = 'btn-11Points';
+  const btn_15Points = 'btn-15Points';
 
   it('renders correctly', () => {
     renderer.create(<GameSetup />);
@@ -32,7 +34,25 @@ describe('<GameSetup />', () => {
       );
     });
 
-    it('only gives the options for 11 points and 15 points', () => {});
+    it('only gives the options for 11 points and 15 points', () => {
+      const {getByTestId} = render(<GameSetup />);
+
+      const americanScoringButton = getByTestId('btn-americanScoring');
+      const elevenPointsButton = getByTestId(btn_11Points);
+      const fifteenPointsButton = getByTestId(btn_15Points);
+      const ninePointsButton = getByTestId(btn_ninePoints);
+
+      expect(americanScoringButton).not.toBeNull();
+      expect(ninePointsButton).not.toBeNull();
+      expect(elevenPointsButton).not.toBeNull();
+      expect(fifteenPointsButton).not.toBeNull();
+
+      fireEvent.press(americanScoringButton);
+
+      expect(ninePointsButton.props.style.backgroundColor).toEqual(
+        disabledButtonStyle,
+      );
+    });
 
     it('allows the user to switch to english scoring', () => {
       const {getByTestId} = render(<GameSetup />);
@@ -52,6 +72,28 @@ describe('<GameSetup />', () => {
   });
 
   describe('English scoring', () => {
-    it('disables 15 & 11 points when selecting english scoring', () => {});
+    it('disables 15 & 11 points when selecting english scoring', () => {
+      const {getByTestId} = render(<GameSetup />);
+
+      const englishScoringButton = getByTestId('btn-englishScoring');
+      const elevenPointsButton = getByTestId(btn_11Points);
+      const fifteenPointsButton = getByTestId(btn_15Points);
+      const ninePointsButton = getByTestId(btn_ninePoints);
+
+      expect(englishScoringButton).not.toBeNull();
+      expect(ninePointsButton).not.toBeNull();
+      expect(elevenPointsButton).not.toBeNull();
+      expect(fifteenPointsButton).not.toBeNull();
+
+      fireEvent.press(englishScoringButton);
+
+      expect(fifteenPointsButton.props.style.backgroundColor).toEqual(
+        disabledButtonStyle,
+      );
+
+      expect(elevenPointsButton.props.style.backgroundColor).toEqual(
+        disabledButtonStyle,
+      );
+    });
   });
 });
