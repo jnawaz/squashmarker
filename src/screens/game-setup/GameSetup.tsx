@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {Button, SafeAreaView, Text, TextInput, View} from 'react-native';
+import {SafeAreaView, Text, TextInput, View} from 'react-native';
 import BaseTouchable from '../../components/BaseTouchable/BaseTouchable';
 import {styles} from './GameSetup.style';
 import {globalStyle} from '../../globals/styles/Global.style';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
+import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
 
 const GameSetup = () => {
   const [playerAName, setPlayerAName] = useState('');
@@ -32,6 +33,30 @@ const GameSetup = () => {
 
   const isAmericanScoring = () => {
     return scoringMethod === ScoringMethod.AmericanScoring;
+  };
+
+  const playerNamesFilledIn = () => {
+    return playerAName !== '' && playerBName !== '';
+  };
+
+  const canStartGame = () => {
+    switch (scoringMethod) {
+      case ScoringMethod.AmericanScoring:
+        return (
+          playerNamesFilledIn() &&
+          (bestOfGames === BestOfGames.BestOf3 ||
+            bestOfGames === BestOfGames.BestOf5) &&
+          (pointsPerGame === PointsPerGame.PointsTo11 ||
+            pointsPerGame === PointsPerGame.PointsTo15)
+        );
+      case ScoringMethod.EnglishScoring:
+        return (
+          playerNamesFilledIn() &&
+          (bestOfGames === BestOfGames.BestOf3 ||
+            bestOfGames === BestOfGames.BestOf5) &&
+          pointsPerGame === PointsPerGame.PointsTo9
+        );
+    }
   };
 
   return (
@@ -136,7 +161,11 @@ const GameSetup = () => {
           />
         </View>
         <View>
-          <Button title={'Start game'} />
+          <PrimaryButton
+            disabled={!canStartGame()}
+            text={'Start game'}
+            onPress={() => {}}
+          />
         </View>
       </SafeAreaView>
     </>

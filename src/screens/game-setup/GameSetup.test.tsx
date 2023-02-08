@@ -5,9 +5,10 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {fireEvent, render} from '@testing-library/react-native';
 import GameSetup from './GameSetup';
+import {Colors} from '../../colors/Colors';
 
 describe('<GameSetup />', () => {
-  const disabledButtonStyle = 'rgba(82, 179, 236, 0.3)';
+  const disabledButtonStyle = Colors.secondaryDisabled;
   const btn_americanScoring = 'btn-americanScoring';
   const btn_englishScoring = 'btn-englishScoring';
   const btn_ninePoints = 'btn-9Points';

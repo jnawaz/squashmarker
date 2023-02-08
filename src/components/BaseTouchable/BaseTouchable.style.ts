@@ -20,6 +20,6 @@ export const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginRight: 12,
-    backgroundColor: 'rgba(82, 179, 236, 0.3)',
+    backgroundColor: Colors.secondaryDisabled,
   },
 });
