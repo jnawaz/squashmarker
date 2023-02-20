@@ -4,5 +4,6 @@ import {Colors} from '../../colors/Colors';
 export const styles = StyleSheet.create({
   score: {
     color: Colors.white,
+    textAlign: 'center',
   },
 });

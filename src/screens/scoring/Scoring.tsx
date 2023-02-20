@@ -7,10 +7,10 @@ const Scoring = () => {
   return (
     <SafeAreaView style={styles.scoringContainer}>
       <View style={styles.gameStateContainer}>
-        <View>
+        <View style={styles.playerScoreContainer}>
           <ScoreIndicator />
         </View>
-        <View>
+        <View style={styles.playerScoreContainer}>
           <ScoreIndicator />
         </View>
       </View>

@@ -13,4 +13,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  playerScoreContainer: {
+    width: '50%',
+    // borderWidth: 1,
+    // borderColor: Colors.white,
+  },
 });
