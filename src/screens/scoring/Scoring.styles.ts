@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   },
   scoringControlsContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   homeScoreContainer: {
     width: '40%',

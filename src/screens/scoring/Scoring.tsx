@@ -14,10 +14,7 @@ const Scoring = () => {
           <ScoreIndicator />
         </View>
       </View>
-      <View style={styles.scoringControlsContainer}>
-        <View>{/*<ScoreControl />*/}</View>
-        <View>{/*<ScoreControl />*/}</View>
-      </View>
+      <View style={styles.scoringControlsContainer} />
     </SafeAreaView>
   );
 };
