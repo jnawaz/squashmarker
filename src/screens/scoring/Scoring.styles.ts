@@ -4,6 +4,8 @@ import {Colors} from '../../colors/Colors';
 export const styles = StyleSheet.create({
   gameStateContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 16,
   },
   scoringContainer: {
     backgroundColor: Colors.primary,
@@ -13,9 +15,26 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  playerScoreContainer: {
-    width: '50%',
-    // borderWidth: 1,
-    // borderColor: Colors.white,
+  homeScoreContainer: {
+    width: '40%',
+    backgroundColor: Colors.white,
+    borderColor: Colors.secondary,
+    borderWidth: 1,
+    marginTop: 6,
+    height: 120,
+    borderRadius: 20,
+    marginLeft: 12,
+    marginRight: 12,
+  },
+  awayScoreContainer: {
+    width: '40%',
+    backgroundColor: Colors.white,
+    borderColor: Colors.secondary,
+    borderWidth: 1,
+    marginTop: 6,
+    height: 120,
+    borderRadius: 20,
+    marginLeft: 12,
+    marginRight: 12,
   },
 });
