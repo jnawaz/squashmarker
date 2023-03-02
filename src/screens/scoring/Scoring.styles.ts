@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   scoringControlsContainer: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     // backgroundColor: Colors.white,
   },
 

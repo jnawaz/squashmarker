@@ -6,16 +6,16 @@ const ScoringButtons = () => {
   return (
     <View style={styles.scoringButtonsContainer}>
       <TouchableOpacity style={styles.scoringButton}>
-        <Text>+1</Text>
+        <Text style={styles.buttonText}>+1</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.scoringButton}>
-        <Text>Handout</Text>
+        <Text style={styles.buttonText}>Handout</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.scoringButton}>
-        <Text>Let</Text>
+        <Text style={styles.buttonText}>Let</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.scoringButton}>
-        <Text>Stroke</Text>
+        <Text style={styles.buttonText}>Stroke</Text>
       </TouchableOpacity>
     </View>
   );

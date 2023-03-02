@@ -16,12 +16,8 @@ const Scoring = () => {
         </View>
       </View>
       <View style={styles.scoringControlsContainer}>
-        <View style={styles.scoreControlsHome}>
-          <ScoringButtons />
-        </View>
-        <View style={styles.scoreControlsAway}>
-          <ScoringButtons />
-        </View>
+        <ScoringButtons />
+        <ScoringButtons />
       </View>
     </SafeAreaView>
   );
