@@ -2,6 +2,7 @@ import React from 'react';
 import {SafeAreaView, View} from 'react-native';
 import {styles} from './Scoring.styles';
 import ScoreIndicator from '../../components/ScoreIndicator/ScoreIndicator';
+import ScoringButtons from '../../components/ScoringButtons/ScoringButtons';
 
 const Scoring = () => {
   return (
@@ -14,7 +15,14 @@ const Scoring = () => {
           <ScoreIndicator />
         </View>
       </View>
-      <View style={styles.scoringControlsContainer} />
+      <View style={styles.scoringControlsContainer}>
+        <View style={styles.scoreControlsHome}>
+          <ScoringButtons />
+        </View>
+        <View style={styles.scoreControlsAway}>
+          <ScoringButtons />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

@@ -4,17 +4,20 @@ import {Colors} from '../../colors/Colors';
 export const styles = StyleSheet.create({
   gameStateContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginTop: 16,
   },
   scoringContainer: {
     backgroundColor: Colors.primary,
     height: '100%',
+    width: '100%',
   },
   scoringControlsContainer: {
+    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // backgroundColor: Colors.white,
   },
+
   homeScoreContainer: {
     width: '40%',
     backgroundColor: Colors.white,
@@ -36,5 +39,12 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 12,
     marginRight: 12,
+  },
+  scoreControlsHome: {
+    width: '50%',
+    // flexDirection: 'column',
+  },
+  scoreControlsAway: {
+    width: '50%',
   },
 });
