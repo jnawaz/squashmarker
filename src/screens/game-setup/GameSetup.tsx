@@ -7,8 +7,9 @@ import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const GameSetup = () => {
+const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [playerAName, setPlayerAName] = useState('');
   const [playerBName, setPlayerBName] = useState('');
   const [scoringMethod, setScoringMethod] = useState<ScoringMethod>();
@@ -164,7 +165,9 @@ const GameSetup = () => {
           <PrimaryButton
             disabled={!canStartGame()}
             text={'Start game'}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('Scoring');
+            }}
           />
         </View>
       </SafeAreaView>

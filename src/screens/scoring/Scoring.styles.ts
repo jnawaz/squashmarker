@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     marginTop: 16,
   },
   scoringContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     backgroundColor: Colors.primary,
     height: '100%',
     width: '100%',

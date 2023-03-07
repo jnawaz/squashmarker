@@ -2,9 +2,23 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './ScoringButtons.styles';
 
-const ScoringButtons = () => {
+export type ScoringButtonProps = {
+  homeButtons?: undefined | boolean;
+  awayButtons?: undefined | boolean;
+  incrementPoint: () => void;
+  handout: () => void;
+  let: () => void;
+  stroke: () => void;
+};
+
+const ScoringButtons = (props: ScoringButtonProps) => {
   return (
-    <View style={styles.scoringButtonsContainer}>
+    <View
+      style={
+        props.homeButtons
+          ? styles.homeScoringContainer
+          : styles.awayScoringContainer
+      }>
       <TouchableOpacity style={styles.scoringButton}>
         <Text style={styles.buttonText}>+1</Text>
       </TouchableOpacity>

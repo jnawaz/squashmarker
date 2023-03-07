@@ -3,4 +3,5 @@ export const Colors = {
   secondary: '#52B3EC',
   white: '#FFFFFF',
   secondaryDisabled: '#0C4A6E',
+  red: '#FF0000',
 };

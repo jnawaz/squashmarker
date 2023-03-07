@@ -19,10 +19,10 @@ function App(): JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Scoring"
-          component={Scoring}
+          name="GameSetup"
+          component={GameSetup}
           options={{
-            title: 'Scoring',
+            title: 'New game',
             headerStyle: {
               backgroundColor: Colors.primary,
             },
@@ -30,10 +30,10 @@ function App(): JSX.Element {
           }}
         />
         <Stack.Screen
-          name="GameSetup"
-          component={GameSetup}
+          name="Scoring"
+          component={Scoring}
           options={{
-            title: 'New game',
+            title: 'Scoring',
             headerStyle: {
               backgroundColor: Colors.primary,
             },
