@@ -5,13 +5,17 @@ import ScoreIndicator from '../../components/ScoreIndicator/ScoreIndicator';
 import ScoringButtons from '../../components/ScoringButtons/ScoringButtons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ResetMatchButton from '../../components/ResetMatchButton/ResetMatchButton';
+import ServicePicker from '../../components/ServicePicker/ServicePicker';
+import {GameData} from '../../types/game-data/GameData';
 
-const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
+const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
+  const gameData: GameData = route.params?.game;
+
   useEffect(() => {
     navigation.setOptions({
       headerBackVisible: false,
     });
-  }, [navigation]);
+  }, [navigation, route.params?.game]);
 
   return (
     <SafeAreaView style={styles.scoringContainer}>
@@ -28,7 +32,8 @@ const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
           <ScoringButtons
             homeButtons={true}
             incrementPoint={() => {
-              throw new Error('Function not implemented.');
+              gameData.homePlayerPoints! += 1;
+              console.log(gameData);
             }}
             handout={() => {
               throw new Error('Function not implemented.');
@@ -57,6 +62,7 @@ const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
           />
         </View>
       </View>
+      <ServicePicker homePlayerName={'TestA'} awayPlayerName={'Test B'} />
       <View>
         <ResetMatchButton />
       </View>

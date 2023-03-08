@@ -8,6 +8,7 @@ import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {GameData} from '../../types/game-data/GameData';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [playerAName, setPlayerAName] = useState('');
@@ -15,6 +16,8 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [scoringMethod, setScoringMethod] = useState<ScoringMethod>();
   const [bestOfGames, setBestOfGames] = useState<BestOfGames>();
   const [pointsPerGame, setPointsPerGame] = useState<PointsPerGame>();
+
+  const game = new GameData();
 
   const pointsTo15 = () => {
     return pointsPerGame === PointsPerGame.PointsTo15;
@@ -59,6 +62,19 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
         );
     }
   };
+
+  function instantiateGameData() {
+    game.bestOfGames = bestOfGames;
+    game.pointsPerGame = pointsPerGame;
+    game.scoringSystem = scoringMethod;
+    game.homePlayerName = playerAName;
+    game.awayPlayerName = playerBName;
+    game.awayPlayerGamesWon = 0;
+    game.homePlayerGamesWon = 0;
+    game.homePlayerPoints = 0;
+    game.awayPlayerPoints = 0;
+    game.currentGame = 1;
+  }
 
   return (
     <>
@@ -166,7 +182,10 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
-              navigation.navigate('Scoring');
+              instantiateGameData();
+              navigation.navigate('Scoring', {
+                game,
+              });
             }}
           />
         </View>
