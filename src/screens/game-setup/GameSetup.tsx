@@ -11,16 +11,23 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameData} from '../../types/game-data/GameData';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
-  const [playerAName, setPlayerAName] = useState('');
-  const [playerBName, setPlayerBName] = useState('');
-  const [scoringMethod, setScoringMethod] = useState<ScoringMethod>();
-  const [bestOfGames, setBestOfGames] = useState<BestOfGames>();
-  const [pointsPerGame, setPointsPerGame] = useState<PointsPerGame>();
-
-  const game = new GameData();
+  const [gameData, setGameData] = useState<GameData>({
+    homePlayerPoints: 0,
+    awayPlayerPoints: 0,
+    currentGame: 1,
+    servingFrom: undefined,
+    playerServing: undefined,
+    awayPlayerGamesWon: undefined,
+    awayPlayerName: undefined,
+    bestOfGames: undefined,
+    homePlayerGamesWon: undefined,
+    homePlayerName: undefined,
+    pointsPerGame: undefined,
+    scoringSystem: undefined,
+  });
 
   const pointsTo15 = () => {
-    return pointsPerGame === PointsPerGame.PointsTo15;
+    return gameData?.pointsPerGame === PointsPerGame.PointsTo15;
   };
 
   const americanTo15 = () => {
@@ -28,53 +35,43 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   };
 
   const isEnglishScoring = () => {
-    return scoringMethod === ScoringMethod.EnglishScoring;
+    return gameData?.scoringSystem === ScoringMethod.EnglishScoring;
   };
 
   const americanTo11 = () => {
-    return isAmericanScoring() && pointsPerGame === PointsPerGame.PointsTo11;
+    return (
+      isAmericanScoring() &&
+      gameData?.pointsPerGame === PointsPerGame.PointsTo11
+    );
   };
 
   const isAmericanScoring = () => {
-    return scoringMethod === ScoringMethod.AmericanScoring;
+    return gameData?.scoringSystem === ScoringMethod.AmericanScoring;
   };
 
   const playerNamesFilledIn = () => {
-    return playerAName !== '' && playerBName !== '';
+    return gameData?.homePlayerName !== '' && gameData?.awayPlayerName !== '';
   };
 
   const canStartGame = () => {
-    switch (scoringMethod) {
+    switch (gameData?.scoringSystem) {
       case ScoringMethod.AmericanScoring:
         return (
           playerNamesFilledIn() &&
-          (bestOfGames === BestOfGames.BestOf3 ||
-            bestOfGames === BestOfGames.BestOf5) &&
-          (pointsPerGame === PointsPerGame.PointsTo11 ||
-            pointsPerGame === PointsPerGame.PointsTo15)
+          (gameData?.bestOfGames === BestOfGames.BestOf3 ||
+            gameData?.bestOfGames === BestOfGames.BestOf5) &&
+          (gameData?.pointsPerGame === PointsPerGame.PointsTo11 ||
+            gameData?.pointsPerGame === PointsPerGame.PointsTo15)
         );
       case ScoringMethod.EnglishScoring:
         return (
           playerNamesFilledIn() &&
-          (bestOfGames === BestOfGames.BestOf3 ||
-            bestOfGames === BestOfGames.BestOf5) &&
-          pointsPerGame === PointsPerGame.PointsTo9
+          (gameData?.bestOfGames === BestOfGames.BestOf3 ||
+            gameData?.bestOfGames === BestOfGames.BestOf5) &&
+          gameData?.pointsPerGame === PointsPerGame.PointsTo9
         );
     }
   };
-
-  function instantiateGameData() {
-    game.bestOfGames = bestOfGames;
-    game.pointsPerGame = pointsPerGame;
-    game.scoringSystem = scoringMethod;
-    game.homePlayerName = playerAName;
-    game.awayPlayerName = playerBName;
-    game.awayPlayerGamesWon = 0;
-    game.homePlayerGamesWon = 0;
-    game.homePlayerPoints = 0;
-    game.awayPlayerPoints = 0;
-    game.currentGame = 1;
-  }
 
   return (
     <>
@@ -85,17 +82,27 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             style={styles.playerNameField}
             placeholder={'Player A Name'}
             onChangeText={updatedName => {
-              setPlayerAName(updatedName);
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  homePlayerName: updatedName,
+                };
+              });
             }}
-            value={playerAName}
+            value={gameData?.homePlayerName}
           />
           <TextInput
             style={styles.playerNameField}
             placeholder={'Player B Name'}
             onChangeText={updatedName => {
-              setPlayerBName(updatedName);
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  awayPlayerName: updatedName,
+                };
+              });
             }}
-            value={playerBName}
+            value={gameData?.awayPlayerName}
           />
         </View>
         <View style={globalStyle.containerPadding}>
@@ -106,7 +113,12 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 {
                   text: 'American scoring',
                   onPress: () => {
-                    setScoringMethod(ScoringMethod.AmericanScoring);
+                    setGameData(prevState => {
+                      return {
+                        ...prevState,
+                        scoringSystem: ScoringMethod.AmericanScoring,
+                      };
+                    });
                   },
                   isDisabled: isEnglishScoring(),
                   testId: 'btn-americanScoring',
@@ -114,7 +126,12 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 {
                   text: 'English scoring',
                   onPress: () => {
-                    setScoringMethod(ScoringMethod.EnglishScoring);
+                    setGameData(prevState => {
+                      return {
+                        ...prevState,
+                        scoringSystem: ScoringMethod.EnglishScoring,
+                      };
+                    });
                   },
                   isDisabled: isAmericanScoring(),
                   testId: 'btn-englishScoring',
@@ -130,17 +147,27 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               {
                 text: 'Best of 3',
                 onPress: () => {
-                  setBestOfGames(BestOfGames.BestOf3);
+                  setGameData(prevState => {
+                    return {
+                      ...prevState,
+                      bestOfGames: BestOfGames.BestOf3,
+                    };
+                  });
                 },
-                isDisabled: bestOfGames === BestOfGames.BestOf5,
+                isDisabled: gameData?.bestOfGames === BestOfGames.BestOf5,
                 testId: 'btn-bestOf3',
               },
               {
                 text: 'Best of 5',
                 onPress: () => {
-                  setBestOfGames(BestOfGames.BestOf5);
+                  setGameData(prevState => {
+                    return {
+                      ...prevState,
+                      bestOfGames: BestOfGames.BestOf5,
+                    };
+                  });
                 },
-                isDisabled: bestOfGames === BestOfGames.BestOf3,
+                isDisabled: gameData?.bestOfGames === BestOfGames.BestOf3,
                 testId: 'btn-bestOf5',
               },
             ]}
@@ -153,7 +180,12 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               {
                 text: '15 points',
                 onPress: () => {
-                  setPointsPerGame(PointsPerGame.PointsTo15);
+                  setGameData(prevState => {
+                    return {
+                      ...prevState,
+                      pointsPerGame: PointsPerGame.PointsTo15,
+                    };
+                  });
                 },
                 isDisabled: isEnglishScoring() || americanTo11(),
                 testId: 'btn-15Points',
@@ -161,7 +193,12 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               {
                 text: '11 points',
                 onPress: () => {
-                  setPointsPerGame(PointsPerGame.PointsTo11);
+                  setGameData(prevState => {
+                    return {
+                      ...prevState,
+                      pointsPerGame: PointsPerGame.PointsTo11,
+                    };
+                  });
                 },
                 isDisabled: isEnglishScoring() || americanTo15(),
                 testId: 'btn-11Points',
@@ -169,7 +206,12 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               {
                 text: '9 points',
                 onPress: () => {
-                  setPointsPerGame(PointsPerGame.PointsTo9);
+                  setGameData(prevState => {
+                    return {
+                      ...prevState,
+                      pointsPerGame: PointsPerGame.PointsTo9,
+                    };
+                  });
                 },
                 isDisabled: isAmericanScoring(),
                 testId: 'btn-9Points',
@@ -182,9 +224,9 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
-              instantiateGameData();
+              console.log(gameData);
               navigation.navigate('Scoring', {
-                game,
+                gameData,
               });
             }}
           />

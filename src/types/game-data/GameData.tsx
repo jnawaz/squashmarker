@@ -3,7 +3,7 @@ import {PointsPerGame} from '../points-per-game/PointsPerGame';
 import {ScoringMethod} from '../scoring/ScoringMethod';
 import {ServiceBox} from '../service-box/ServiceBox';
 
-export class GameData {
+export type GameData = {
   homePlayerName: string | undefined;
   awayPlayerName: string | undefined;
   homePlayerGamesWon: number | undefined;
@@ -15,4 +15,5 @@ export class GameData {
   pointsPerGame: PointsPerGame | undefined;
   scoringSystem: ScoringMethod | undefined;
   servingFrom: ServiceBox | undefined;
-}
+  playerServing: string | undefined;
+};

@@ -1,4 +1,4 @@
 export enum ServiceBox {
-  Left,
-  Right,
+  Left = 'Left',
+  Right = 'Right',
 }

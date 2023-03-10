@@ -20,17 +20,27 @@ const ScoringButtons = (props: ScoringButtonProps) => {
           : styles.awayScoringContainer
       }>
       <TouchableOpacity
+        testID={'incrementPointButton'}
         style={styles.scoringButton}
         onPress={props.incrementPoint}>
         <Text style={styles.buttonText}>+1</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.scoringButton} onPress={props.handout}>
+      <TouchableOpacity
+        testID={'handoutButton'}
+        style={styles.scoringButton}
+        onPress={props.handout}>
         <Text style={styles.buttonText}>Handout</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.scoringButton} onPress={props.let}>
+      <TouchableOpacity
+        testID={'letButton'}
+        style={styles.scoringButton}
+        onPress={props.let}>
         <Text style={styles.buttonText}>Let</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.scoringButton} onPress={props.stroke}>
+      <TouchableOpacity
+        testID={'strokeButton'}
+        style={styles.scoringButton}
+        onPress={props.stroke}>
         <Text style={styles.buttonText}>Stroke</Text>
       </TouchableOpacity>
     </View>
