@@ -16,7 +16,7 @@ const ServicePicker = (props: ServicePickerProps) => {
   return props.isVisible ? (
     <View style={styles.pickServerContainer}>
       <Text style={styles.servicePickerHeading}>
-        Please select server and which side they're serving from
+        Please select service box (and server if applicable)
       </Text>
       {!props.isServerDefined && (
         <View style={styles.servingPlayerContainer}>
