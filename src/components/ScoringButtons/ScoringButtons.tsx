@@ -9,6 +9,7 @@ export type ScoringButtonProps = {
   handout: () => void;
   let: () => void;
   stroke: () => void;
+  disableButton: boolean;
 };
 
 const ScoringButtons = (props: ScoringButtonProps) => {
@@ -20,8 +21,12 @@ const ScoringButtons = (props: ScoringButtonProps) => {
           : styles.awayScoringContainer
       }>
       <TouchableOpacity
+        disabled={props.disableButton}
         testID={'incrementPointButton'}
-        style={styles.scoringButton}
+        style={[
+          styles.scoringButton,
+          props.disableButton ? {opacity: 0.5} : null,
+        ]}
         onPress={props.incrementPoint}>
         <Text style={styles.buttonText}>+1</Text>
       </TouchableOpacity>
@@ -32,14 +37,22 @@ const ScoringButtons = (props: ScoringButtonProps) => {
         <Text style={styles.buttonText}>Handout</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        disabled={props.disableButton}
         testID={'letButton'}
-        style={styles.scoringButton}
+        style={[
+          styles.scoringButton,
+          props.disableButton ? {opacity: 0.5} : null,
+        ]}
         onPress={props.let}>
         <Text style={styles.buttonText}>Let</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        disabled={props.disableButton}
         testID={'strokeButton'}
-        style={styles.scoringButton}
+        style={[
+          styles.scoringButton,
+          props.disableButton ? {opacity: 0.5} : null,
+        ]}
         onPress={props.stroke}>
         <Text style={styles.buttonText}>Stroke</Text>
       </TouchableOpacity>

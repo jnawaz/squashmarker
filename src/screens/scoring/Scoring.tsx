@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 import {styles} from './Scoring.styles';
 import ScoreIndicator from '../../components/ScoreIndicator/ScoreIndicator';
 import ScoringButtons from '../../components/ScoringButtons/ScoringButtons';
@@ -8,15 +8,20 @@ import ResetMatchButton from '../../components/ResetMatchButton/ResetMatchButton
 import ServicePicker from '../../components/ServicePicker/ServicePicker';
 import {GameData} from '../../types/game-data/GameData';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
+import {ServiceBox} from '../../types/service-box/ServiceBox';
 
 const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>(route.params?.gameData);
 
-  console.log(gameData);
-
   useEffect(() => {
     navigation.setOptions({
       headerBackVisible: false,
+      headerRight: () => (
+        <Text style={styles.gamesScore}>
+          {gameData.homePlayerGamesWon ?? 0} -{' '}
+          {gameData.awayPlayerGamesWon ?? 0}
+        </Text>
+      ),
     });
   }, [navigation, route.params?.game, gameData]);
 
@@ -45,11 +50,11 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
       }
     }
   };
-  const homePlayerServing = () => {
+  const isHomePlayerServing = () => {
     return gameData.playerServing === gameData.homePlayerName;
   };
 
-  const switchService = () => {
+  const switchServingPlayer = () => {
     if (gameData.playerServing === gameData.homePlayerName) {
       setGameData(prevState => {
         return {
@@ -82,6 +87,69 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
       };
     });
   };
+
+  const switchServiceBox = () => {
+    if (gameData.servingFrom === ServiceBox.Left) {
+      setGameData(prevState => {
+        return {
+          ...prevState,
+          servingFrom: ServiceBox.Right,
+        };
+      });
+    } else if (gameData.servingFrom === ServiceBox.Right) {
+      setGameData(prevState => {
+        return {
+          ...prevState,
+          servingFrom: ServiceBox.Left,
+        };
+      });
+    }
+  };
+
+  const isAwayPlayerServing = () => {
+    return gameData.playerServing === gameData.awayPlayerName;
+  };
+
+  const resetScores = () => {
+    setGameData(prevState => {
+      return {
+        ...prevState,
+        homePlayerPoints: 0,
+        awayPlayerPoints: 0,
+      };
+    });
+  };
+
+  const hasWonGame = (playerName: string) => {
+    switch (playerName) {
+      case gameData.homePlayerName: {
+        return gameData.homePlayerPoints === gameData.pointsPerGame! - 1;
+      }
+      case gameData.awayPlayerName: {
+        return gameData.awayPlayerPoints === gameData.pointsPerGame! - 1;
+      }
+    }
+  };
+  const incrementGameScore = (playerName: string) => {
+    switch (playerName) {
+      case gameData.homePlayerName: {
+        setGameData(prevState => {
+          return {
+            ...prevState,
+            homePlayerGamesWon: (prevState.homePlayerGamesWon! += 1),
+          };
+        });
+      }
+      case gameData.awayPlayerName: {
+        setGameData(prevState => {
+          return {
+            ...prevState,
+            awayPlayerGamesWon: (prevState.awayPlayerGamesWon! += 1),
+          };
+        });
+      }
+    }
+  };
   return (
     <SafeAreaView style={styles.scoringContainer}>
       <View>
@@ -102,15 +170,22 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
           </View>
         </View>
         <View style={styles.scoringControlsContainer}>
+          {/* Home Player Controls */}
           <ScoringButtons
             homeButtons={true}
             incrementPoint={() => {
-              if (isAmericanScoring() && homePlayerServing()) {
+              if (isAmericanScoring()) {
                 incrementScoreFor(gameData.homePlayerName!);
+                switchServiceBox();
+                if (hasWonGame(gameData.homePlayerName!)) {
+                  resetScores();
+                  incrementGameScore(gameData.homePlayerName!);
+                  resetServingFrom();
+                }
               }
             }}
             handout={() => {
-              switchService();
+              switchServingPlayer();
               resetServingFrom();
             }}
             let={() => {
@@ -121,14 +196,23 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
                 incrementScoreFor(gameData.homePlayerName!);
               }
             }}
+            disableButton={!isHomePlayerServing()}
           />
+          {/* End Home Player Controls */}
+          {/* Away Player Controls */}
           <ScoringButtons
             awayButtons={true}
             incrementPoint={() => {
               incrementScoreFor(gameData.awayPlayerName!);
+              switchServiceBox();
+              if (hasWonGame(gameData.awayPlayerName!)) {
+                resetScores();
+                incrementGameScore(gameData.awayPlayerName!);
+                resetServingFrom();
+              }
             }}
             handout={() => {
-              switchService();
+              switchServingPlayer();
               resetServingFrom();
             }}
             let={() => {
@@ -137,9 +221,12 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             stroke={() => {
               if (isAmericanScoring()) {
                 incrementScoreFor(gameData.awayPlayerName!);
+                switchServiceBox();
               }
             }}
+            disableButton={!isAwayPlayerServing()}
           />
+          {/* End Away Player Controls */}
         </View>
       </View>
       <ServicePicker

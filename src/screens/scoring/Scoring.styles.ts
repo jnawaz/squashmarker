@@ -51,4 +51,8 @@ export const styles = StyleSheet.create({
   scoreControlsAway: {
     width: '50%',
   },
+  gamesScore: {
+    color: Colors.white,
+    fontSize: 18,
+  },
 });

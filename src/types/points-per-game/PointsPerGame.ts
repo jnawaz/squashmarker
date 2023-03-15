@@ -1,5 +1,5 @@
 export enum PointsPerGame {
-  PointsTo9,
-  PointsTo11,
-  PointsTo15,
+  PointsTo9 = 9,
+  PointsTo11 = 11,
+  PointsTo15 = 15,
 }
