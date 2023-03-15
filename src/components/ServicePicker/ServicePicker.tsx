@@ -9,6 +9,7 @@ export type ServicePickerProps = {
   isVisible: boolean;
   selectedPlayer: (playerName: string) => void;
   servingFrom: (servingFrom: ServiceBox) => void;
+  isServerDefined: boolean;
 };
 
 const ServicePicker = (props: ServicePickerProps) => {
@@ -17,18 +18,21 @@ const ServicePicker = (props: ServicePickerProps) => {
       <Text style={styles.servicePickerHeading}>
         Please select server and which side they're serving from
       </Text>
-      <View style={styles.servingPlayerContainer}>
-        <TouchableOpacity
-          style={styles.homePlayerButton}
-          onPress={() => props.selectedPlayer(props.homePlayerName)}>
-          <Text style={styles.buttonText}>{props.homePlayerName}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.awayPlayerButton}
-          onPress={() => props.selectedPlayer(props.awayPlayerName)}>
-          <Text style={styles.buttonText}>{props.awayPlayerName}</Text>
-        </TouchableOpacity>
-      </View>
+      {!props.isServerDefined && (
+        <View style={styles.servingPlayerContainer}>
+          <TouchableOpacity
+            style={styles.homePlayerButton}
+            onPress={() => props.selectedPlayer(props.homePlayerName)}>
+            <Text style={styles.buttonText}>{props.homePlayerName}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.awayPlayerButton}
+            onPress={() => props.selectedPlayer(props.awayPlayerName)}>
+            <Text style={styles.buttonText}>{props.awayPlayerName}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <View style={styles.serviceBoxContainer}>
         <TouchableOpacity
           style={styles.homePlayerButton}

@@ -14,14 +14,20 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>(route.params?.gameData);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerBackVisible: false,
-      headerRight: () => (
+    const scoringElement = () => {
+      return (
         <Text style={styles.gamesScore}>
           {gameData.homePlayerGamesWon ?? 0} -{' '}
           {gameData.awayPlayerGamesWon ?? 0}
         </Text>
-      ),
+      );
+    };
+
+    navigation.setOptions({
+      headerBackVisible: false,
+      headerRight: () => {
+        return scoringElement();
+      },
     });
   }, [navigation, route.params?.game, gameData]);
 
@@ -139,6 +145,7 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             homePlayerGamesWon: (prevState.homePlayerGamesWon! += 1),
           };
         });
+        break;
       }
       case gameData.awayPlayerName: {
         setGameData(prevState => {
@@ -147,6 +154,7 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             awayPlayerGamesWon: (prevState.awayPlayerGamesWon! += 1),
           };
         });
+        break;
       }
     }
   };
@@ -230,7 +238,8 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
         </View>
       </View>
       <ServicePicker
-        isVisible={!serverDefined() || !serviceBoxDefined()}
+        isServerDefined={serverDefined()}
+        isVisible={!serviceBoxDefined()}
         homePlayerName={gameData.homePlayerName!}
         awayPlayerName={gameData.awayPlayerName!}
         selectedPlayer={playerName => {
