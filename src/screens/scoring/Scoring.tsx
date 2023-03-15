@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {Alert, SafeAreaView, Text, View} from 'react-native';
 import {styles} from './Scoring.styles';
 import ScoreIndicator from '../../components/ScoreIndicator/ScoreIndicator';
 import ScoringButtons from '../../components/ScoringButtons/ScoringButtons';
@@ -136,6 +136,19 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
       }
     }
   };
+
+  const hasWonMatch = (playerName: string) => {
+    switch (playerName) {
+      case gameData.homePlayerName: {
+        return gameData.homePlayerGamesWon === gameData.bestOfGames! - 1;
+      }
+
+      case gameData.awayPlayerName: {
+        return gameData.awayPlayerGamesWon === gameData.bestOfGames! - 1;
+      }
+    }
+  };
+
   const incrementGameScore = (playerName: string) => {
     switch (playerName) {
       case gameData.homePlayerName: {
@@ -182,13 +195,30 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
           <ScoringButtons
             homeButtons={true}
             incrementPoint={() => {
-              if (isAmericanScoring()) {
-                incrementScoreFor(gameData.homePlayerName!);
-                switchServiceBox();
-                if (hasWonGame(gameData.homePlayerName!)) {
-                  resetScores();
-                  incrementGameScore(gameData.homePlayerName!);
-                  resetServingFrom();
+              if (isEnglishScoring()) {
+                if (isHomePlayerServing()) {
+                  incrementScoreFor(gameData.homePlayerName!);
+                  if (hasWonGame(gameData.homePlayerName!)) {
+                    resetScores();
+                    incrementGameScore(gameData.homePlayerName!);
+                    resetServingFrom();
+                  } else {
+                    switchServiceBox();
+                  }
+                }
+              } else {
+                if (isAmericanScoring()) {
+                  incrementScoreFor(gameData.homePlayerName!);
+                  if (hasWonGame(gameData.homePlayerName!)) {
+                    console.log('match won!');
+                  } else {
+                    switchServiceBox();
+                    if (hasWonGame(gameData.homePlayerName!)) {
+                      resetScores();
+                      incrementGameScore(gameData.homePlayerName!);
+                      resetServingFrom();
+                    }
+                  }
                 }
               }
             }}
@@ -202,6 +232,9 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             stroke={() => {
               if (isAmericanScoring()) {
                 incrementScoreFor(gameData.homePlayerName!);
+              } else if (isEnglishScoring() && isHomePlayerServing()) {
+                incrementScoreFor(gameData.homePlayerName!);
+                switchServiceBox();
               }
             }}
             disableButton={!isHomePlayerServing()}
@@ -211,12 +244,23 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
           <ScoringButtons
             awayButtons={true}
             incrementPoint={() => {
-              incrementScoreFor(gameData.awayPlayerName!);
-              switchServiceBox();
-              if (hasWonGame(gameData.awayPlayerName!)) {
-                resetScores();
-                incrementGameScore(gameData.awayPlayerName!);
-                resetServingFrom();
+              if (isEnglishScoring()) {
+                if (isAwayPlayerServing()) {
+                  incrementScoreFor(gameData.awayPlayerName!);
+                  switchServiceBox();
+                }
+              } else {
+                incrementScoreFor(gameData.awayPlayerName!);
+                if (hasWonGame(gameData.awayPlayerName!)) {
+                  console.log('match won');
+                } else {
+                  switchServiceBox();
+                  if (hasWonGame(gameData.awayPlayerName!)) {
+                    resetScores();
+                    incrementGameScore(gameData.awayPlayerName!);
+                    resetServingFrom();
+                  }
+                }
               }
             }}
             handout={() => {
@@ -260,7 +304,25 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
         }}
       />
       <View>
-        <ResetMatchButton />
+        <ResetMatchButton
+          onPress={() => {
+            Alert.alert(
+              'Squash marker',
+              'Are you sure you want to reset the match?',
+              [
+                {
+                  text: 'Yes',
+                  onPress: () => navigation.goBack(),
+                },
+                {
+                  text: 'No',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+              ],
+            );
+          }}
+        />
       </View>
     </SafeAreaView>
   );

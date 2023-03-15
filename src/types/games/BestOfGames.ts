@@ -1,4 +1,4 @@
 export enum BestOfGames {
-  BestOf3,
-  BestOf5,
+  BestOf3 = 3,
+  BestOf5 = 5,
 }
