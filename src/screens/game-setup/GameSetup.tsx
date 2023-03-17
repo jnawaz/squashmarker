@@ -224,6 +224,7 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
+              console.log(gameData);
               navigation.navigate('Scoring', {
                 gameData,
               });

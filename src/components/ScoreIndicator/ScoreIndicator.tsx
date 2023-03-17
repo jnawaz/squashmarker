@@ -7,6 +7,9 @@ export type ScoreIndicatorProps = {
   points: number;
   serviceBox: ServiceBox | undefined;
   isServing: boolean;
+  scoreTestId: string;
+  serviceLeftIndicatorTestId: string;
+  serviceRightIndicatorTestId: string;
 };
 
 const ScoreIndicator = (props: ScoreIndicatorProps) => {

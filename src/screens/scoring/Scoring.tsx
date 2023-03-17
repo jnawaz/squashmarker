@@ -171,12 +171,16 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
       }
     }
   };
+  //TODO: handle tied score logic
   return (
     <SafeAreaView style={styles.scoringContainer}>
       <View>
         <View style={styles.gameStateContainer}>
           <View style={styles.homeScoreContainer}>
             <ScoreIndicator
+              scoreTestId={'homeScore'}
+              serviceLeftIndicatorTestId={'homeServiceBoxL'}
+              serviceRightIndicatorTestId={'homeServiceBoxR'}
               points={gameData.homePlayerPoints!}
               isServing={gameData.playerServing === gameData.homePlayerName}
               serviceBox={gameData.servingFrom}
@@ -184,6 +188,9 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
           </View>
           <View style={styles.awayScoreContainer}>
             <ScoreIndicator
+              scoreTestId={'awayScore'}
+              serviceRightIndicatorTestId={'awayServiceBoxR'}
+              serviceLeftIndicatorTestId={'awayServiceBoxL'}
               points={gameData.awayPlayerPoints!}
               isServing={gameData.playerServing === gameData.awayPlayerName}
               serviceBox={gameData.servingFrom}
@@ -207,17 +214,34 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
                   }
                 }
               } else {
-                if (isAmericanScoring()) {
-                  incrementScoreFor(gameData.homePlayerName!);
-                  if (hasWonGame(gameData.homePlayerName!)) {
-                    console.log('match won!');
+                incrementScoreFor(gameData.homePlayerName!);
+                if (hasWonGame(gameData.homePlayerName!)) {
+                  resetScores();
+                  incrementGameScore(gameData.homePlayerName!);
+                  if (hasWonMatch(gameData.homePlayerName!)) {
+                    Alert.alert(
+                      'Squash marker',
+                      `${gameData.homePlayerName!} has won ${
+                        gameData.homePlayerGamesWon
+                      } - ${gameData.awayPlayerGamesWon}`,
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            navigation.goBack();
+                          },
+                        },
+                      ],
+                    );
                   } else {
-                    switchServiceBox();
-                    if (hasWonGame(gameData.homePlayerName!)) {
-                      resetScores();
-                      incrementGameScore(gameData.homePlayerName!);
-                      resetServingFrom();
-                    }
+                    resetServingFrom();
+                  }
+                } else {
+                  switchServiceBox();
+                  if (hasWonGame(gameData.homePlayerName!)) {
+                    resetScores();
+                    incrementGameScore(gameData.homePlayerName!);
+                    resetServingFrom();
                   }
                 }
               }
@@ -225,6 +249,9 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             handout={() => {
               switchServingPlayer();
               resetServingFrom();
+              if (isAmericanScoring()) {
+                incrementScoreFor(gameData.homePlayerName!);
+              }
             }}
             let={() => {
               /*Empty intentionally, point is replayed*/
@@ -252,7 +279,28 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
               } else {
                 incrementScoreFor(gameData.awayPlayerName!);
                 if (hasWonGame(gameData.awayPlayerName!)) {
-                  console.log('match won');
+                  console.log('game won');
+                  resetScores();
+                  resetServingFrom();
+                  incrementGameScore(gameData.awayPlayerName!);
+                  if (hasWonMatch(gameData.awayPlayerName!)) {
+                    Alert.alert(
+                      'Squash marker',
+                      `${gameData.awayPlayerName!} has won ${
+                        gameData.awayPlayerGamesWon
+                      } - ${gameData.homePlayerGamesWon}`,
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            navigation.goBack();
+                          },
+                        },
+                      ],
+                    );
+                  } else {
+                    resetServingFrom();
+                  }
                 } else {
                   switchServiceBox();
                   if (hasWonGame(gameData.awayPlayerName!)) {
@@ -266,6 +314,9 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             handout={() => {
               switchServingPlayer();
               resetServingFrom();
+              if (isAmericanScoring()) {
+                incrementScoreFor(gameData.awayPlayerName!);
+              }
             }}
             let={() => {
               /* Replay the point, intentionally empty*/
