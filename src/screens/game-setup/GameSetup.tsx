@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Text, TextInput, View} from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView, Text, TextInput, View } from "react-native";
 import BaseTouchable from '../../components/BaseTouchable/BaseTouchable';
 import {styles} from './GameSetup.style';
 import {globalStyle} from '../../globals/styles/Global.style';
@@ -58,17 +58,17 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
       case ScoringMethod.AmericanScoring:
         return (
           playerNamesFilledIn() &&
-          (gameData?.bestOfGames === BestOfGames.BestOf3 ||
-            gameData?.bestOfGames === BestOfGames.BestOf5) &&
-          (gameData?.pointsPerGame === PointsPerGame.PointsTo11 ||
-            gameData?.pointsPerGame === PointsPerGame.PointsTo15)
+          (gameData!!.bestOfGames === BestOfGames.BestOf3 ||
+            gameData!!.bestOfGames === BestOfGames.BestOf5) &&
+          (gameData!!.pointsPerGame === PointsPerGame.PointsTo11 ||
+            gameData!!.pointsPerGame === PointsPerGame.PointsTo15)
         );
       case ScoringMethod.EnglishScoring:
         return (
           playerNamesFilledIn() &&
-          (gameData?.bestOfGames === BestOfGames.BestOf3 ||
-            gameData?.bestOfGames === BestOfGames.BestOf5) &&
-          gameData?.pointsPerGame === PointsPerGame.PointsTo9
+          (gameData!!.bestOfGames === BestOfGames.BestOf3 ||
+            gameData!!.bestOfGames === BestOfGames.BestOf5) &&
+          gameData!!.pointsPerGame === PointsPerGame.PointsTo9
         );
     }
   };
@@ -78,32 +78,34 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
       <SafeAreaView style={styles.gameScreenContainer}>
         <View style={styles.gameSetupViewContainer}>
           <Text style={globalStyle.textHeading}>Players</Text>
-          <TextInput
-            style={styles.playerNameField}
-            placeholder={'Player A Name'}
-            onChangeText={updatedName => {
-              setGameData(prevState => {
-                return {
-                  ...prevState,
-                  homePlayerName: updatedName,
-                };
-              });
-            }}
-            value={gameData?.homePlayerName}
-          />
-          <TextInput
-            style={styles.playerNameField}
-            placeholder={'Player B Name'}
-            onChangeText={updatedName => {
-              setGameData(prevState => {
-                return {
-                  ...prevState,
-                  awayPlayerName: updatedName,
-                };
-              });
-            }}
-            value={gameData?.awayPlayerName}
-          />
+          <KeyboardAvoidingView behavior={'height'}>
+            <TextInput
+              style={styles.playerNameField}
+              placeholder={'Player A Name'}
+              onChangeText={updatedName => {
+                setGameData(prevState => {
+                  return {
+                    ...prevState,
+                    homePlayerName: updatedName,
+                  };
+                });
+              }}
+              value={gameData?.homePlayerName}
+            />
+            <TextInput
+              style={styles.playerNameField}
+              placeholder={'Player B Name'}
+              onChangeText={updatedName => {
+                setGameData(prevState => {
+                  return {
+                    ...prevState,
+                    awayPlayerName: updatedName,
+                  };
+                });
+              }}
+              value={gameData?.awayPlayerName}
+            />
+          </KeyboardAvoidingView>
         </View>
         <View style={globalStyle.containerPadding}>
           <Text style={globalStyle.textHeading}>Scoring method</Text>
