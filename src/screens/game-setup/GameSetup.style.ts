@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     margin: 12,
   },
   playerNameField: {
+    paddingLeft: 16,
     backgroundColor: Colors.white,
     height: 48,
     marginTop: 16,

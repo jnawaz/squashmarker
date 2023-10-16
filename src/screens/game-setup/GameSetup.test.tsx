@@ -15,13 +15,38 @@ describe('<GameSetup />', () => {
   const btn_11Points = 'btn-11Points';
   const btn_15Points = 'btn-15Points';
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const mockedNavigation = {
+    setOptions: jest.fn(),
+  };
+  const mockedRoute = {
+    params: {
+      gameData: {
+        homePlayerPoints: 0,
+      },
+    },
+  };
+
   it('renders correctly', () => {
-    renderer.create(<GameSetup />);
+    renderer.create(
+      <GameSetup
+        navigation={mockedNavigation as any}
+        route={mockedRoute as any}
+      />,
+    );
   });
 
   describe('American scoring', () => {
     it('disables 9 points when selecting american scoring', () => {
-      const {getByTestId} = render(<GameSetup />);
+      const {getByTestId} = render(
+        <GameSetup
+          navigation={mockedNavigation as any}
+          route={mockedRoute as any}
+        />,
+      );
 
       const americanScoringButton = getByTestId('btn-americanScoring');
       const ninePointsButton = getByTestId(btn_ninePoints);
@@ -36,7 +61,12 @@ describe('<GameSetup />', () => {
     });
 
     it('only gives the options for 11 points and 15 points', () => {
-      const {getByTestId} = render(<GameSetup />);
+      const {getByTestId} = render(
+        <GameSetup
+          navigation={mockedNavigation as any}
+          route={mockedRoute as any}
+        />,
+      );
 
       const americanScoringButton = getByTestId('btn-americanScoring');
       const elevenPointsButton = getByTestId(btn_11Points);
@@ -56,7 +86,12 @@ describe('<GameSetup />', () => {
     });
 
     it('allows the user to switch to english scoring', () => {
-      const {getByTestId} = render(<GameSetup />);
+      const {getByTestId} = render(
+        <GameSetup
+          navigation={mockedNavigation as any}
+          route={mockedRoute as any}
+        />,
+      );
 
       const americanScoringButton = getByTestId(btn_americanScoring);
       fireEvent.press(americanScoringButton);
@@ -74,7 +109,12 @@ describe('<GameSetup />', () => {
 
   describe('English scoring', () => {
     it('disables 15 & 11 points when selecting english scoring', () => {
-      const {getByTestId} = render(<GameSetup />);
+      const {getByTestId} = render(
+        <GameSetup
+          navigation={mockedNavigation as any}
+          route={mockedRoute as any}
+        />,
+      );
 
       const englishScoringButton = getByTestId('btn-englishScoring');
       const elevenPointsButton = getByTestId(btn_11Points);

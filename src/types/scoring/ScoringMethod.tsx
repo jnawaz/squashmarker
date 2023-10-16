@@ -1,4 +1,4 @@
 export enum ScoringMethod {
-  AmericanScoring,
-  EnglishScoring,
+  AmericanScoring = 'AMERICAN_SCORING',
+  EnglishScoring = 'ENGLISH_SCORING',
 }
