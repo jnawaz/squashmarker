@@ -5,4 +5,8 @@ export const GlobalStyles = StyleSheet.create({
     backgroundColor: '#14100F',
     height: '100%',
   },
+  containerPadding: {
+    paddingStart: 16,
+    paddingEnd: 16,
+  },
 });

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   SafeAreaView,
+  ScrollView,
   Text,
   TextInput,
   View,
@@ -15,7 +16,14 @@ import {GameData} from '../../types/game-data/GameData';
 import {AppRoutes} from '../../routes/AppRoutes';
 import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { Colors } from "../../colors/Colors";
+import {Typography} from '../../Typography/Typography';
+import {ColorDefinitions, Colors} from '../../colors/Colors';
+import {style} from './GameSetup.style';
+import {
+  VerticalPadding,
+  VerticalPaddingBottom,
+  VerticalPaddingTop,
+} from '../../Layout/Padding';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -32,14 +40,19 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
     pointsPerGame: undefined,
     scoringSystem: undefined,
   });
-  const scoringMethodSegments: Array<string> = ['English', 'American'];
+  const englishScoringMethodSegments: Array<string> = ['English', 'American'];
   const [currentScoringMethodIndex, setCurrentScoringMethodIndex] = useState(0);
 
   const bestOfSegments: Array<string> = ['Best of 3', 'Best of 5'];
   const [currentBestOf, setCurrentBestOf] = useState(0);
 
-  const pointsPerGameSegments: Array<string> = ['To 11', 'To 15', 'To 9'];
-  const [currentPointsPerGame, setCurrentPointsPerGame] = useState(0);
+  const americanPointsPerGameSegments: Array<string> = ['To 11', 'To 15'];
+  const [americanCurrentPointsPerGame, setAmericanCurrentPointsPerGame] =
+    useState(0);
+
+  const englishPointsPerGameSegment: Array<string> = ['To 9'];
+  const [englishCurrentPointsPerGame, setEnglishCurrentPointsPerGame] =
+    useState(0);
 
   const isScoringTo15 = () => {
     return gameData?.pointsPerGame === PointsPerGame.PointsTo15;
@@ -91,12 +104,21 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
 
   return (
     <>
-      <SafeAreaView style={GlobalStyles.screenBackground}>
-        <View>
-          <Text style={{color: Colors.orange}}>Player details</Text>
+      <SafeAreaView
+        style={[GlobalStyles.screenBackground, GlobalStyles.containerPadding]}>
+        <ScrollView>
+          <Text style={[Typography.h2, Colors.orange, VerticalPadding.xs]}>
+            Player details
+          </Text>
           <KeyboardAvoidingView behavior={'height'}>
+            <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
+              Home Player
+            </Text>
             <TextInput
-              placeholder={'Player A Name'}
+              autoCorrect={false}
+              style={style.primaryInput}
+              placeholderTextColor={ColorDefinitions.white}
+              placeholder={'Home Player'}
               onChangeText={updatedName => {
                 setGameData(prevState => {
                   return {
@@ -107,8 +129,14 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               }}
               value={gameData?.homePlayerName}
             />
+            <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
+              Away Player
+            </Text>
             <TextInput
-              placeholder={'Player B Name'}
+              autoCorrect={false}
+              style={style.primaryInput}
+              placeholderTextColor={ColorDefinitions.white}
+              placeholder={'Away Player'}
               onChangeText={updatedName => {
                 setGameData(prevState => {
                   return {
@@ -120,43 +148,86 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               value={gameData?.awayPlayerName}
             />
           </KeyboardAvoidingView>
-        </View>
-        <View>
-          <Text style={{color: Colors.orange}}>Scoring method</Text>
-          <SegmentedControl
-            values={scoringMethodSegments}
-            selectedIndex={currentScoringMethodIndex}
-          />
-        </View>
-        <View>
-          <Text style={{color: Colors.orange}}>Best of (3 / 5) games</Text>
-          <SegmentedControl
-            values={bestOfSegments}
-            selectedIndex={currentBestOf}
-          />
-        </View>
-        <View>
-          <Text style={{color: Colors.orange}}>Points per game</Text>
-          <SegmentedControl
-            values={pointsPerGameSegments}
-            selectedIndex={currentScoringMethodIndex}
-            onValueChange={value => {
-              console.log(value);
-            }}
-          />
-        </View>
-        <View>
-          <PrimaryButton
-            disabled={!canStartGame()}
-            text={'Start game'}
-            onPress={() => {
-              console.log(gameData);
-              navigation.navigate(AppRoutes.Scoring, {
-                gameData,
-              });
-            }}
-          />
-        </View>
+
+          <View>
+            <Text
+              style={[
+                Typography.h2,
+                Colors.orange,
+                VerticalPaddingTop.m,
+                VerticalPaddingBottom.s,
+              ]}>
+              Scoring method
+            </Text>
+            <SegmentedControl
+              values={englishScoringMethodSegments}
+              selectedIndex={currentScoringMethodIndex}
+              onValueChange={value => {
+                let scoringMethod: ScoringMethod;
+
+                if (value === 'American') {
+                  setCurrentScoringMethodIndex(1);
+                  scoringMethod = ScoringMethod.AmericanScoring;
+                } else {
+                  setCurrentScoringMethodIndex(0);
+                  scoringMethod = ScoringMethod.EnglishScoring;
+                }
+
+                setGameData(prevState => {
+                  return {
+                    ...prevState,
+                    scoringSystem: scoringMethod,
+                  };
+                });
+              }}
+            />
+          </View>
+          <View>
+            <Text
+              style={[
+                Typography.h2,
+                Colors.orange,
+                VerticalPaddingTop.m,
+                VerticalPaddingBottom.s,
+              ]}>
+              Best of (3 / 5) games
+            </Text>
+            <SegmentedControl
+              values={bestOfSegments}
+              selectedIndex={currentBestOf}
+            />
+          </View>
+          <View>
+            <Text
+              style={[
+                Typography.h2,
+                Colors.orange,
+                VerticalPaddingTop.m,
+                VerticalPaddingBottom.s,
+              ]}>
+              Points per game
+            </Text>
+            <SegmentedControl
+              values={
+                currentScoringMethodIndex === 0
+                  ? englishPointsPerGameSegment
+                  : americanPointsPerGameSegments
+              }
+              selectedIndex={currentScoringMethodIndex}
+            />
+          </View>
+          <View>
+            <PrimaryButton
+              disabled={!canStartGame()}
+              text={'Start game'}
+              onPress={() => {
+                navigation.navigate(AppRoutes.Scoring, {
+                  gameData,
+                });
+              }}
+            />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </>
   );
