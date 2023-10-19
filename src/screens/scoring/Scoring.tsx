@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, SafeAreaView, Text, View} from 'react-native';
-import {styles} from './Scoring.styles';
 import ScoreIndicator from '../../components/ScoreIndicator/ScoreIndicator';
 import ScoringButtons from '../../components/ScoringButtons/ScoringButtons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -16,7 +15,7 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
   useEffect(() => {
     const scoringElement = () => {
       return (
-        <Text style={styles.gamesScore}>
+        <Text>
           {gameData.homePlayerGamesWon ?? 0} -{' '}
           {gameData.awayPlayerGamesWon ?? 0}
         </Text>
@@ -173,10 +172,10 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
   };
   //TODO: handle tied score logic
   return (
-    <SafeAreaView style={styles.scoringContainer}>
+    <SafeAreaView>
       <View>
-        <View style={styles.gameStateContainer}>
-          <View style={styles.homeScoreContainer}>
+        <View>
+          <View>
             <ScoreIndicator
               scoreTestId={'homeScore'}
               serviceLeftIndicatorTestId={'homeServiceBoxL'}
@@ -186,7 +185,7 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
               serviceBox={gameData.servingFrom}
             />
           </View>
-          <View style={styles.awayScoreContainer}>
+          <View>
             <ScoreIndicator
               scoreTestId={'awayScore'}
               serviceRightIndicatorTestId={'awayServiceBoxR'}
@@ -197,7 +196,7 @@ const Scoring = ({navigation, route}: NativeStackScreenProps<any>) => {
             />
           </View>
         </View>
-        <View style={styles.scoringControlsContainer}>
+        <View>
           {/* Home Player Controls */}
           <ScoringButtons
             homeButtons={true}

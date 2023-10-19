@@ -9,7 +9,6 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GameSetup from './src/screens/game-setup/GameSetup';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Scoring from './src/screens/scoring/Scoring';
 
 const Stack = createNativeStackNavigator();
@@ -23,10 +22,8 @@ function App(): JSX.Element {
           component={GameSetup}
           options={{
             title: 'New game',
-            headerStyle: {
-              backgroundColor: Colors.primary,
-            },
-            headerTintColor: Colors.white,
+            headerStyle: {},
+            headerTintColor: '',
           }}
         />
         <Stack.Screen
@@ -35,9 +32,9 @@ function App(): JSX.Element {
           options={{
             title: 'Scoring',
             headerStyle: {
-              backgroundColor: Colors.primary,
+              backgroundColor: '',
             },
-            headerTintColor: Colors.white,
+            headerTintColor: '',
           }}
         />
       </Stack.Navigator>
