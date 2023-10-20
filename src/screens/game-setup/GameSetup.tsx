@@ -1,18 +1,31 @@
-import React, { useState } from "react";
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
-import { ScoringMethod } from "../../types/scoring/ScoringMethod";
-import { BestOfGames } from "../../types/games/BestOfGames";
-import { PointsPerGame } from "../../types/points-per-game/PointsPerGame";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { GameData } from "../../types/game-data/GameData";
-import { AppRoutes } from "../../routes/AppRoutes";
-import { GlobalStyles } from "../../GlobalStyles/GlobalStyles";
-import SegmentedControl, { FontStyle } from "@react-native-segmented-control/segmented-control";
-import { Typography } from "../../Typography/Typography";
-import { ColorDefinitions, Colors } from "../../colors/Colors";
-import { style } from "./GameSetup.style";
-import { VerticalPadding, VerticalPaddingBottom, VerticalPaddingTop } from "../../Layout/Padding";
+import React, {useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {ScoringMethod} from '../../types/scoring/ScoringMethod';
+import {BestOfGames} from '../../types/games/BestOfGames';
+import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
+import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {GameData} from '../../types/game-data/GameData';
+import {AppRoutes} from '../../routes/AppRoutes';
+import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
+import SegmentedControl, {
+  FontStyle,
+} from '@react-native-segmented-control/segmented-control';
+import {Typography} from '../../Typography/Typography';
+import {ColorDefinitions, Colors} from '../../colors/Colors';
+import {style} from './GameSetup.style';
+import {
+  VerticalPadding,
+  VerticalPaddingBottom,
+  VerticalPaddingTop,
+} from '../../Layout/Padding';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -170,7 +183,7 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               selectedIndex={currentScoringMethodIndex}
               onValueChange={value => {
                 let scoringMethod: ScoringMethod;
-                let pointsPerGame: PointsPerGame
+                let pointsPerGame: PointsPerGame;
 
                 if (value === 'American') {
                   setCurrentScoringMethodIndex(1);
