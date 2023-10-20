@@ -1,29 +1,18 @@
-import React, {useState} from 'react';
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
-import {ScoringMethod} from '../../types/scoring/ScoringMethod';
-import {BestOfGames} from '../../types/games/BestOfGames';
-import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
-import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {GameData} from '../../types/game-data/GameData';
-import {AppRoutes} from '../../routes/AppRoutes';
-import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import {Typography} from '../../Typography/Typography';
-import {ColorDefinitions, Colors} from '../../colors/Colors';
-import {style} from './GameSetup.style';
-import {
-  VerticalPadding,
-  VerticalPaddingBottom,
-  VerticalPaddingTop,
-} from '../../Layout/Padding';
+import React, { useState } from "react";
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
+import { ScoringMethod } from "../../types/scoring/ScoringMethod";
+import { BestOfGames } from "../../types/games/BestOfGames";
+import { PointsPerGame } from "../../types/points-per-game/PointsPerGame";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { GameData } from "../../types/game-data/GameData";
+import { AppRoutes } from "../../routes/AppRoutes";
+import { GlobalStyles } from "../../GlobalStyles/GlobalStyles";
+import SegmentedControl, { FontStyle } from "@react-native-segmented-control/segmented-control";
+import { Typography } from "../../Typography/Typography";
+import { ColorDefinitions, Colors } from "../../colors/Colors";
+import { style } from "./GameSetup.style";
+import { VerticalPadding, VerticalPaddingBottom, VerticalPaddingTop } from "../../Layout/Padding";
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -102,6 +91,18 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
     }
   };
 
+  const segmentControlFont: FontStyle = {
+    fontSize: 16,
+    fontFamily: 'TitilliumWeb-Regular',
+    color: '#000000',
+  };
+
+  const activeControlFont: FontStyle = {
+    fontSize: 16,
+    fontFamily: 'TitilliumWeb-Regular',
+    color: ColorDefinitions.white,
+  };
+
   return (
     <>
       <SafeAreaView
@@ -160,23 +161,32 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               Scoring method
             </Text>
             <SegmentedControl
+              tintColor={ColorDefinitions.green400}
+              fontStyle={segmentControlFont}
+              activeFontStyle={activeControlFont}
+              backgroundColor={ColorDefinitions.green500}
+              style={{height: 44}}
               values={englishScoringMethodSegments}
               selectedIndex={currentScoringMethodIndex}
               onValueChange={value => {
                 let scoringMethod: ScoringMethod;
+                let pointsPerGame: PointsPerGame
 
                 if (value === 'American') {
                   setCurrentScoringMethodIndex(1);
                   scoringMethod = ScoringMethod.AmericanScoring;
+                  pointsPerGame = PointsPerGame.PointsTo11;
                 } else {
                   setCurrentScoringMethodIndex(0);
                   scoringMethod = ScoringMethod.EnglishScoring;
+                  pointsPerGame = PointsPerGame.PointsTo9;
                 }
 
                 setGameData(prevState => {
                   return {
                     ...prevState,
                     scoringSystem: scoringMethod,
+                    pointsPerGame: pointsPerGame,
                   };
                 });
               }}
@@ -193,6 +203,11 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               Best of (3 / 5) games
             </Text>
             <SegmentedControl
+              tintColor={ColorDefinitions.green400}
+              fontStyle={segmentControlFont}
+              activeFontStyle={activeControlFont}
+              backgroundColor={ColorDefinitions.green500}
+              style={{height: 44}}
               values={bestOfSegments}
               selectedIndex={currentBestOf}
             />
@@ -208,12 +223,17 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
               Points per game
             </Text>
             <SegmentedControl
+              tintColor={ColorDefinitions.green400}
+              fontStyle={segmentControlFont}
+              activeFontStyle={activeControlFont}
+              style={{height: 44}}
               values={
                 currentScoringMethodIndex === 0
                   ? englishPointsPerGameSegment
                   : americanPointsPerGameSegments
               }
               selectedIndex={currentScoringMethodIndex}
+              backgroundColor={ColorDefinitions.green500}
             />
           </View>
           <View>

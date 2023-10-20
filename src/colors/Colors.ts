@@ -4,7 +4,7 @@ export const ColorDefinitions = {
   orange: '#F26800',
   green: '#85BC90',
   green400: '#51A190',
-  // white: '#FFFFFF',
+  green500: '#204039',
   white: '#FFFFFF',
 };
 
