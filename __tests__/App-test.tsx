@@ -13,8 +13,6 @@ jest.mock('@react-navigation/native');
 
 describe('App Tests', () => {
   it('renders correctly', async () => {
-    await renderer.create(
-        <App />
-    );
+    renderer.create(<App />);
   });
 });
