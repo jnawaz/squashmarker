@@ -10,10 +10,8 @@ import {
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
-import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameData} from '../../types/game-data/GameData';
-import {AppRoutes} from '../../routes/AppRoutes';
 import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
 import SegmentedControl, {
   FontStyle,
@@ -26,6 +24,8 @@ import {
   VerticalPaddingBottom,
   VerticalPaddingTop,
 } from '../../Layout/Padding';
+import {AppRoutes} from '../../routes/AppRoutes';
+import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -117,152 +117,150 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   };
 
   return (
-    <>
-      <SafeAreaView
-        style={[GlobalStyles.screenBackground, GlobalStyles.containerPadding]}>
-        <ScrollView>
-          <Text style={[Typography.h2, Colors.orange, VerticalPadding.xs]}>
-            Player details
+    <SafeAreaView
+      style={[GlobalStyles.screenBackground, GlobalStyles.containerPadding]}>
+      <ScrollView>
+        <Text style={[Typography.h2, Colors.orange, VerticalPadding.xs]}>
+          Player details
+        </Text>
+        <KeyboardAvoidingView behavior={'height'}>
+          <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
+            Home Player
           </Text>
-          <KeyboardAvoidingView behavior={'height'}>
-            <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
-              Home Player
-            </Text>
-            <TextInput
-              autoCorrect={false}
-              style={style.primaryInput}
-              placeholderTextColor={ColorDefinitions.white}
-              placeholder={'Home Player'}
-              onChangeText={updatedName => {
-                setGameData(prevState => {
-                  return {
-                    ...prevState,
-                    homePlayerName: updatedName,
-                  };
-                });
-              }}
-              value={gameData?.homePlayerName}
-            />
-            <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
-              Away Player
-            </Text>
-            <TextInput
-              autoCorrect={false}
-              style={style.primaryInput}
-              placeholderTextColor={ColorDefinitions.white}
-              placeholder={'Away Player'}
-              onChangeText={updatedName => {
-                setGameData(prevState => {
-                  return {
-                    ...prevState,
-                    awayPlayerName: updatedName,
-                  };
-                });
-              }}
-              value={gameData?.awayPlayerName}
-            />
-          </KeyboardAvoidingView>
+          <TextInput
+            autoCorrect={false}
+            style={style.primaryInput}
+            placeholderTextColor={ColorDefinitions.white}
+            placeholder={'Home Player'}
+            onChangeText={updatedName => {
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  homePlayerName: updatedName,
+                };
+              });
+            }}
+            value={gameData?.homePlayerName}
+          />
+          <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
+            Away Player
+          </Text>
+          <TextInput
+            autoCorrect={false}
+            style={style.primaryInput}
+            placeholderTextColor={ColorDefinitions.white}
+            placeholder={'Away Player'}
+            onChangeText={updatedName => {
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  awayPlayerName: updatedName,
+                };
+              });
+            }}
+            value={gameData?.awayPlayerName}
+          />
+        </KeyboardAvoidingView>
 
-          <View>
-            <Text
-              style={[
-                Typography.h2,
-                Colors.orange,
-                VerticalPaddingTop.m,
-                VerticalPaddingBottom.s,
-              ]}>
-              Scoring method
-            </Text>
-            <SegmentedControl
-              tintColor={ColorDefinitions.green400}
-              fontStyle={segmentControlFont}
-              activeFontStyle={activeControlFont}
-              backgroundColor={ColorDefinitions.green500}
-              style={{height: 44}}
-              values={englishScoringMethodSegments}
-              selectedIndex={currentScoringMethodIndex}
-              onValueChange={value => {
-                let scoringMethod: ScoringMethod;
-                let pointsPerGame: PointsPerGame;
+        <View>
+          <Text
+            style={[
+              Typography.h2,
+              Colors.orange,
+              VerticalPaddingTop.m,
+              VerticalPaddingBottom.s,
+            ]}>
+            Scoring method
+          </Text>
+          <SegmentedControl
+            tintColor={ColorDefinitions.green400}
+            fontStyle={segmentControlFont}
+            activeFontStyle={activeControlFont}
+            backgroundColor={ColorDefinitions.green500}
+            style={{height: 44}}
+            values={englishScoringMethodSegments}
+            selectedIndex={currentScoringMethodIndex}
+            onValueChange={value => {
+              let scoringMethod: ScoringMethod;
+              let pointsPerGame: PointsPerGame;
 
-                if (value === 'American') {
-                  setCurrentScoringMethodIndex(1);
-                  scoringMethod = ScoringMethod.AmericanScoring;
-                  pointsPerGame = PointsPerGame.PointsTo11;
-                } else {
-                  setCurrentScoringMethodIndex(0);
-                  scoringMethod = ScoringMethod.EnglishScoring;
-                  pointsPerGame = PointsPerGame.PointsTo9;
-                }
-
-                setGameData(prevState => {
-                  return {
-                    ...prevState,
-                    scoringSystem: scoringMethod,
-                    pointsPerGame: pointsPerGame,
-                  };
-                });
-              }}
-            />
-          </View>
-          <View>
-            <Text
-              style={[
-                Typography.h2,
-                Colors.orange,
-                VerticalPaddingTop.m,
-                VerticalPaddingBottom.s,
-              ]}>
-              Best of (3 / 5) games
-            </Text>
-            <SegmentedControl
-              tintColor={ColorDefinitions.green400}
-              fontStyle={segmentControlFont}
-              activeFontStyle={activeControlFont}
-              backgroundColor={ColorDefinitions.green500}
-              style={{height: 44}}
-              values={bestOfSegments}
-              selectedIndex={currentBestOf}
-            />
-          </View>
-          <View>
-            <Text
-              style={[
-                Typography.h2,
-                Colors.orange,
-                VerticalPaddingTop.m,
-                VerticalPaddingBottom.s,
-              ]}>
-              Points per game
-            </Text>
-            <SegmentedControl
-              tintColor={ColorDefinitions.green400}
-              fontStyle={segmentControlFont}
-              activeFontStyle={activeControlFont}
-              style={{height: 44}}
-              values={
-                currentScoringMethodIndex === 0
-                  ? englishPointsPerGameSegment
-                  : americanPointsPerGameSegments
+              if (value === 'American') {
+                setCurrentScoringMethodIndex(1);
+                scoringMethod = ScoringMethod.AmericanScoring;
+                pointsPerGame = PointsPerGame.PointsTo11;
+              } else {
+                setCurrentScoringMethodIndex(0);
+                scoringMethod = ScoringMethod.EnglishScoring;
+                pointsPerGame = PointsPerGame.PointsTo9;
               }
-              selectedIndex={currentScoringMethodIndex}
-              backgroundColor={ColorDefinitions.green500}
-            />
-          </View>
-          <View>
-            <PrimaryButton
-              disabled={!canStartGame()}
-              text={'Start game'}
-              onPress={() => {
-                navigation.navigate(AppRoutes.Scoring, {
-                  gameData,
-                });
-              }}
-            />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  scoringSystem: scoringMethod,
+                  pointsPerGame: pointsPerGame,
+                };
+              });
+            }}
+          />
+        </View>
+        <View>
+          <Text
+            style={[
+              Typography.h2,
+              Colors.orange,
+              VerticalPaddingTop.m,
+              VerticalPaddingBottom.s,
+            ]}>
+            Best of (3 / 5) games
+          </Text>
+          <SegmentedControl
+            tintColor={ColorDefinitions.green400}
+            fontStyle={segmentControlFont}
+            activeFontStyle={activeControlFont}
+            backgroundColor={ColorDefinitions.green500}
+            style={{height: 44}}
+            values={bestOfSegments}
+            selectedIndex={currentBestOf}
+          />
+        </View>
+        <View>
+          <Text
+            style={[
+              Typography.h2,
+              Colors.orange,
+              VerticalPaddingTop.m,
+              VerticalPaddingBottom.s,
+            ]}>
+            Points per game
+          </Text>
+          <SegmentedControl
+            tintColor={ColorDefinitions.green400}
+            fontStyle={segmentControlFont}
+            activeFontStyle={activeControlFont}
+            style={{height: 44}}
+            values={
+              currentScoringMethodIndex === 0
+                ? englishPointsPerGameSegment
+                : americanPointsPerGameSegments
+            }
+            selectedIndex={currentScoringMethodIndex}
+            backgroundColor={ColorDefinitions.green500}
+          />
+        </View>
+        <View>
+          <PrimaryButton
+            disabled={!canStartGame()}
+            text={'Start game'}
+            onPress={() => {
+              navigation.navigate(AppRoutes.Scoring, {
+                gameData,
+              });
+            }}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
