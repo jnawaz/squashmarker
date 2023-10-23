@@ -1,31 +1,18 @@
-import React, {useState} from 'react';
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
-import {ScoringMethod} from '../../types/scoring/ScoringMethod';
-import {BestOfGames} from '../../types/games/BestOfGames';
-import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {GameData} from '../../types/game-data/GameData';
-import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
-import SegmentedControl, {
-  FontStyle,
-} from '@react-native-segmented-control/segmented-control';
-import {Typography} from '../../Typography/Typography';
-import {ColorDefinitions, Colors} from '../../colors/Colors';
-import {style} from './GameSetup.style';
-import {
-  VerticalPadding,
-  VerticalPaddingBottom,
-  VerticalPaddingTop,
-} from '../../Layout/Padding';
-import {AppRoutes} from '../../routes/AppRoutes';
-import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
+import React, { useEffect, useState } from "react";
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
+import { ScoringMethod } from "../../types/scoring/ScoringMethod";
+import { BestOfGames } from "../../types/games/BestOfGames";
+import { PointsPerGame } from "../../types/points-per-game/PointsPerGame";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { GameData } from "../../types/game-data/GameData";
+import { GlobalStyles } from "../../GlobalStyles/GlobalStyles";
+import SegmentedControl, { FontStyle } from "@react-native-segmented-control/segmented-control";
+import { Typography } from "../../Typography/Typography";
+import { ColorDefinitions, Colors } from "../../colors/Colors";
+import { style } from "./GameSetup.style";
+import { VerticalPadding, VerticalPaddingBottom, VerticalPaddingTop } from "../../Layout/Padding";
+import { AppRoutes } from "../../routes/AppRoutes";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -222,6 +209,23 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             style={{height: 44}}
             values={bestOfSegments}
             selectedIndex={currentBestOf}
+            onValueChange={value => {
+              let selectedBestOfGames: BestOfGames;
+              if (value == 'Best of 3') {
+                setCurrentBestOf(0);
+                selectedBestOfGames = BestOfGames.BestOf3;
+              } else {
+                setCurrentBestOf(1);
+                selectedBestOfGames = BestOfGames.BestOf5;
+              }
+
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  bestOfGames: selectedBestOfGames,
+                };
+              });
+            }}
           />
         </View>
         <View>
