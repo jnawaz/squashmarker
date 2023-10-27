@@ -1,18 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
-import { ScoringMethod } from "../../types/scoring/ScoringMethod";
-import { BestOfGames } from "../../types/games/BestOfGames";
-import { PointsPerGame } from "../../types/points-per-game/PointsPerGame";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { GameData } from "../../types/game-data/GameData";
-import { GlobalStyles } from "../../GlobalStyles/GlobalStyles";
-import SegmentedControl, { FontStyle } from "@react-native-segmented-control/segmented-control";
-import { Typography } from "../../Typography/Typography";
-import { ColorDefinitions, Colors } from "../../colors/Colors";
-import { style } from "./GameSetup.style";
-import { VerticalPadding, VerticalPaddingBottom, VerticalPaddingTop } from "../../Layout/Padding";
-import { AppRoutes } from "../../routes/AppRoutes";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {ScoringMethod} from '../../types/scoring/ScoringMethod';
+import {BestOfGames} from '../../types/games/BestOfGames';
+import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {GameData} from '../../types/game-data/GameData';
+import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
+import SegmentedControl, {
+  FontStyle,
+} from '@react-native-segmented-control/segmented-control';
+import {Typography} from '../../Typography/Typography';
+import {ColorDefinitions, Colors} from '../../colors/Colors';
+import {style} from './GameSetup.style';
+import {
+  VerticalPadding,
+  VerticalPaddingBottom,
+  VerticalPaddingTop,
+} from '../../Layout/Padding';
+import {AppRoutes} from '../../routes/AppRoutes';
+import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
+import {
+  GameDataContextProvider,
+  useGameDataContext,
+} from '../../contexts/GameDataContext';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
@@ -103,6 +120,8 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
     color: ColorDefinitions.white,
   };
 
+  const {gameContextData, updateGameContextData} = useGameDataContext();
+
   return (
     <SafeAreaView
       style={[GlobalStyles.screenBackground, GlobalStyles.containerPadding]}>
@@ -120,12 +139,16 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             placeholderTextColor={ColorDefinitions.white}
             placeholder={'Home Player'}
             onChangeText={updatedName => {
+              console.log(updatedName);
               setGameData(prevState => {
                 return {
                   ...prevState,
                   homePlayerName: updatedName,
                 };
               });
+              console.log(`gameData: ${gameData}`);
+              updateGameContextData(gameData);
+              console.log(`gameContextData: ${gameContextData}`);
             }}
             value={gameData?.homePlayerName}
           />
@@ -144,6 +167,7 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                   awayPlayerName: updatedName,
                 };
               });
+              updateGameContextData(gameData);
             }}
             value={gameData?.awayPlayerName}
           />
@@ -257,6 +281,21 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
+              setGameData(prevState => {
+                return {
+                  ...prevState,
+                  homePlayerPoints: 0,
+                  awayPlayerPoints: 0,
+                };
+              });
+              updateGameContextData(gameData);
+              // updateGameContextData(prevValue => {
+              //   return {
+              //     ...prevValue,
+              //     homePlayerPoints: 0,
+              //     awayPlayerPoints: 0,
+              //   };
+              // });
               navigation.navigate(AppRoutes.Scoring, {
                 gameData,
               });

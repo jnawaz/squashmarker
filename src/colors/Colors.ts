@@ -5,6 +5,7 @@ export const ColorDefinitions = {
   green: '#85BC90',
   green400: '#51A190',
   green500: '#204039',
+  green600: '#042E2A',
   white: '#FFFFFF',
 };
 
