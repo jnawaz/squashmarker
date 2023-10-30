@@ -7,6 +7,8 @@ import ScoreContainer from './score-container/ScoreContainer';
 import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
 import {ColorDefinitions} from '../../colors/Colors';
 import {useGameDataContext} from '../../contexts/GameDataContext';
+import ServerSelection from '../../components/ServerSelection/ServerSelection';
+import ScoringToolKit from '../../components/ScoringToolKit/ScoringToolKit';
 
 const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
   // const [gameData, setGameData] = useState<GameData>(route.params?.gameData);
@@ -196,6 +198,8 @@ const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
           34m: 20s
         </Text>
         <ScoreContainer />
+        <ServerSelection />
+        <ScoringToolKit />
       </ScrollView>
     </SafeAreaView>
   );

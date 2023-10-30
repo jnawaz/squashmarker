@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   SafeAreaView,
@@ -13,9 +13,7 @@ import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameData} from '../../types/game-data/GameData';
 import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
-import SegmentedControl, {
-  FontStyle,
-} from '@react-native-segmented-control/segmented-control';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import {Typography} from '../../Typography/Typography';
 import {ColorDefinitions, Colors} from '../../colors/Colors';
 import {style} from './GameSetup.style';
@@ -26,13 +24,15 @@ import {
 } from '../../Layout/Padding';
 import {AppRoutes} from '../../routes/AppRoutes';
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
+import {useGameDataContext} from '../../contexts/GameDataContext';
 import {
-  GameDataContextProvider,
-  useGameDataContext,
-} from '../../contexts/GameDataContext';
+  activeControlFont,
+  segmentControlFont,
+} from '../../components/SharedStyles/SegmentStyle';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [gameData, setGameData] = useState<GameData>({
+    isServerDetermined: false,
     homePlayerPoints: 0,
     awayPlayerPoints: 0,
     currentGame: 1,
@@ -106,18 +106,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
           gameData!!.pointsPerGame === PointsPerGame.PointsTo9
         );
     }
-  };
-
-  const segmentControlFont: FontStyle = {
-    fontSize: 16,
-    fontFamily: 'TitilliumWeb-Regular',
-    color: '#000000',
-  };
-
-  const activeControlFont: FontStyle = {
-    fontSize: 16,
-    fontFamily: 'TitilliumWeb-Regular',
-    color: ColorDefinitions.white,
   };
 
   const {gameContextData, updateGameContextData} = useGameDataContext();

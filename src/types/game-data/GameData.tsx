@@ -16,4 +16,5 @@ export type GameData = {
   scoringSystem: ScoringMethod | undefined;
   servingFrom: ServiceBox | undefined;
   playerServing: string | undefined;
+  isServerDetermined: boolean;
 };

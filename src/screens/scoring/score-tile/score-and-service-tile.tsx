@@ -19,7 +19,7 @@ const ScoringTile = (props: ScoringTileProps) => {
           borderRadius: 12,
           marginTop: 8,
         }}>
-        <Text style={{textAlign: 'center'}}>
+        <Text style={{textAlign: 'center', paddingVertical: 24}}>
           {props.isHomePlayerTile
             ? gameContextData?.homePlayerPoints
             : gameContextData?.awayPlayerPoints}
@@ -29,10 +29,20 @@ const ScoringTile = (props: ScoringTileProps) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text style={{backgroundColor: ColorDefinitions.orange}}>
+          <Text
+            style={{
+              marginHorizontal: 24,
+              marginBottom: 16,
+            }}>
             L
           </Text>
-          <Text>R</Text>
+          <Text
+            style={{
+              marginHorizontal: 24,
+              marginBottom: 16,
+            }}>
+            R
+          </Text>
         </View>
       </View>
       <Text
