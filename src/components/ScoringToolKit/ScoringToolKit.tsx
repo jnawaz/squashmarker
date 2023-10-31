@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ScoringButton from '../ScoringButtons/ScoringButton';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
@@ -7,46 +7,39 @@ import {GameData} from '../../types/game-data/GameData';
 const ScoringToolKit = () => {
   const {gameContextData, updateGameContextData} = useGameDataContext();
 
-  function incrementScore() {
-    gameContextData!.playerServing === gameContextData!.homePlayerName
-      ? (gameContextData!.homePlayerPoints! += 1)
-      : (gameContextData!.awayPlayerPoints! += 1);
-
+  const incrementScore = () => {
     updateGameContextData((gameContextData: GameData) => {
-      return {
-        ...gameContextData,
-        homePlayerPoints:
-          gameContextData.playerServing === gameContextData.homePlayerName
-            ? (gameContextData.homePlayerPoints! += 1)
-            : gameContextData.homePlayerPoints!,
-        awayPlayerPoints:
-          gameContextData.playerServing === gameContextData.awayPlayerPoints
-            ? (gameContextData.awayPlayerPoints! += 1)
-            : gameContextData.awayPlayerPoints!,
-      };
+      if (gameContextData!.playerServing === gameContextData.homePlayerName) {
+        return {
+          ...gameContextData,
+          homePlayerPoints: (gameContextData.homePlayerPoints! += 1),
+        };
+      } else {
+        return {
+          ...gameContextData,
+          awayPlayerPoints: (gameContextData.awayPlayerPoints! += 1),
+        };
+      }
     });
-  }
-
+  };
   function isAmericanScoring() {
     return gameContextData!.scoringSystem === ScoringMethod.AmericanScoring;
   }
 
-  function handout() {
-    if (gameContextData!.playerServing === gameContextData!.homePlayerName) {
-      gameContextData!.playerServing = gameContextData!.awayPlayerName;
-    } else {
-      gameContextData!.playerServing = gameContextData!.homePlayerName;
-    }
-    updateGameContextData((gameContextData: GameData) => {
+  const handout = () => {
+    updateGameContextData(gameData => {
       return {
-        ...gameContextData,
+        ...gameData,
         playerServing:
-          gameContextData.playerServing === gameContextData.homePlayerName
-            ? gameContextData.awayPlayerName
-            : gameContextData.homePlayerName,
+          gameData.playerServing === gameData.homePlayerName
+            ? gameData.awayPlayerName
+            : gameData.homePlayerName,
+        servingFrom: undefined,
       };
     });
-  }
+  };
+
+  useEffect(() => {}, [gameContextData]);
 
   return (
     <>

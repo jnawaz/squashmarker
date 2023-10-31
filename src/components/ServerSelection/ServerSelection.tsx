@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {ColorDefinitions} from '../../colors/Colors';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
@@ -13,55 +13,78 @@ const ServerSelection = () => {
   const {gameContextData, updateGameContextData} = useGameDataContext();
 
   const isServerDetermined = gameContextData!.isServerDetermined;
+  const isServiceBoxDetermined = gameContextData?.servingFrom !== undefined;
 
-  function updateServerDetermined() {
+  const updateServerDetermined = () => {
     if (gameContextData!.servingFrom && gameContextData!.playerServing) {
-      gameContextData!.isServerDetermined = true;
-      updateGameContextData(gameContextData!);
+      updateGameContextData(gameData => {
+        return {
+          ...gameData,
+          isServerDetermined: true,
+        };
+      });
     }
-  }
+  };
 
-  return !isServerDetermined ? (
+  useEffect(() => {}, [gameContextData, isServiceBoxDetermined]);
+
+  return (
     <View
       style={{
         marginHorizontal: 24,
         marginTop: 24,
       }}>
-      <SegmentedControl
-        tintColor={ColorDefinitions.green400}
-        fontStyle={segmentControlFont}
-        activeFontStyle={activeControlFont}
-        backgroundColor={ColorDefinitions.green500}
-        style={{height: 44}}
-        values={[
-          gameContextData!.homePlayerName!!,
-          gameContextData!.awayPlayerName!!,
-        ]}
-        onValueChange={value => {
-          gameContextData!.playerServing = value;
-          updateGameContextData(gameContextData!);
-          updateServerDetermined();
-        }}
-      />
-      <SegmentedControl
-        tintColor={ColorDefinitions.green400}
-        fontStyle={segmentControlFont}
-        activeFontStyle={activeControlFont}
-        backgroundColor={ColorDefinitions.green500}
-        style={{height: 44, marginTop: 16}}
-        values={['Left Box', 'Right Box']}
-        onValueChange={value => {
-          if (value === 'Left Box') {
-            gameContextData!.servingFrom = ServiceBox.Left;
-          } else {
-            gameContextData!.servingFrom = ServiceBox.Right;
-          }
-          updateGameContextData(gameContextData!);
-          updateServerDetermined();
-        }}
-      />
+      {!isServerDetermined ? (
+        <SegmentedControl
+          tintColor={ColorDefinitions.green400}
+          fontStyle={segmentControlFont}
+          activeFontStyle={activeControlFont}
+          backgroundColor={ColorDefinitions.green500}
+          style={{height: 44}}
+          values={[
+            gameContextData!.homePlayerName!!,
+            gameContextData!.awayPlayerName!!,
+          ]}
+          onValueChange={value => {
+            updateGameContextData(gameData => {
+              return {
+                ...gameData,
+                playerServing: value,
+                isServerDetermined: true,
+              };
+            });
+            updateServerDetermined();
+          }}
+        />
+      ) : null}
+
+      {!isServiceBoxDetermined ? (
+        <SegmentedControl
+          tintColor={ColorDefinitions.green400}
+          fontStyle={segmentControlFont}
+          activeFontStyle={activeControlFont}
+          backgroundColor={ColorDefinitions.green500}
+          style={{height: 44, marginTop: 16}}
+          values={['Left Box', 'Right Box']}
+          onValueChange={value => {
+            var servingFromBox: ServiceBox;
+            if (value === 'Left Box') {
+              servingFromBox = ServiceBox.Left;
+            } else {
+              servingFromBox = ServiceBox.Right;
+            }
+            updateGameContextData(gameData => {
+              return {
+                ...gameData,
+                servingFrom: servingFromBox,
+              };
+            });
+            updateServerDetermined();
+          }}
+        />
+      ) : null}
     </View>
-  ) : null;
+  );
 };
 
 export default ServerSelection;

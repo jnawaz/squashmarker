@@ -1,5 +1,5 @@
 import {useGameDataContext} from '../../../contexts/GameDataContext';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
 import {ServiceBox} from '../../../types/service-box/ServiceBox';
@@ -11,6 +11,8 @@ export type ScoringTileProps = {
 
 const ScoringTile = (props: ScoringTileProps) => {
   const {gameContextData} = useGameDataContext();
+
+  useEffect(() => {}, [gameContextData]);
 
   return (
     <View style={{flex: 1}}>

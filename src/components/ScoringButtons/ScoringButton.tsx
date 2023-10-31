@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import {ColorDefinitions} from '../../colors/Colors';
@@ -11,10 +11,13 @@ const ScoringButton = (props: ScoringButtonProps) => {
   const {gameContextData} = useGameDataContext();
 
   const isServerDetermined = gameContextData!.isServerDetermined;
+  const isServiceBoxDetermined = gameContextData!.servingFrom !== undefined;
+
+  useEffect(() => {}, [gameContextData]);
 
   return (
     <>
-      {isServerDetermined ? (
+      {isServerDetermined && isServiceBoxDetermined ? (
         <TouchableOpacity
           style={{
             backgroundColor: ColorDefinitions.green500,
