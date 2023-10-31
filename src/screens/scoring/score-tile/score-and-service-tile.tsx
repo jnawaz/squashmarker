@@ -2,9 +2,11 @@ import {useGameDataContext} from '../../../contexts/GameDataContext';
 import React from 'react';
 import {Text, View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
+import {ServiceBox} from '../../../types/service-box/ServiceBox';
 
 export type ScoringTileProps = {
   isHomePlayerTile: boolean;
+  isPlayerServing: boolean;
 };
 
 const ScoringTile = (props: ScoringTileProps) => {
@@ -24,26 +26,32 @@ const ScoringTile = (props: ScoringTileProps) => {
             ? gameContextData?.homePlayerPoints
             : gameContextData?.awayPlayerPoints}
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text
+        {props.isPlayerServing ? (
+          <View
             style={{
-              marginHorizontal: 24,
-              marginBottom: 16,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}>
-            L
-          </Text>
-          <Text
-            style={{
-              marginHorizontal: 24,
-              marginBottom: 16,
-            }}>
-            R
-          </Text>
-        </View>
+            {gameContextData!.servingFrom === ServiceBox.Left ? (
+              <Text
+                style={{
+                  marginHorizontal: 24,
+                  marginBottom: 16,
+                }}>
+                L
+              </Text>
+            ) : null}
+            {gameContextData!.servingFrom === ServiceBox.Right ? (
+              <Text
+                style={{
+                  marginHorizontal: 24,
+                  marginBottom: 16,
+                }}>
+                R
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
       </View>
       <Text
         style={{

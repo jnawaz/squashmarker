@@ -7,11 +7,19 @@ import {
   activeControlFont,
   segmentControlFont,
 } from '../SharedStyles/SegmentStyle';
+import {ServiceBox} from '../../types/service-box/ServiceBox';
 
 const ServerSelection = () => {
-  const {gameContextData} = useGameDataContext();
+  const {gameContextData, updateGameContextData} = useGameDataContext();
 
   const isServerDetermined = gameContextData?.isServerDetermined;
+
+  function updateServerDetermined() {
+    if (gameContextData!.servingFrom && gameContextData!.playerServing) {
+      gameContextData!.isServerDetermined = true;
+      updateGameContextData(gameContextData!);
+    }
+  }
 
   return !isServerDetermined ? (
     <View
@@ -30,7 +38,9 @@ const ServerSelection = () => {
           gameContextData?.awayPlayerName!!,
         ]}
         onValueChange={value => {
-          console.log(value);
+          gameContextData!.playerServing = value;
+          updateGameContextData(gameContextData!);
+          updateServerDetermined();
         }}
       />
       <SegmentedControl
@@ -41,7 +51,13 @@ const ServerSelection = () => {
         style={{height: 44, marginTop: 16}}
         values={['Left Box', 'Right Box']}
         onValueChange={value => {
-          console.log(value);
+          if (value === ServiceBox.Left) {
+            gameContextData!.servingFrom = ServiceBox.Left;
+          } else {
+            gameContextData!.servingFrom = ServiceBox.Right;
+          }
+          updateGameContextData(gameContextData!);
+          updateServerDetermined();
         }}
       />
     </View>
