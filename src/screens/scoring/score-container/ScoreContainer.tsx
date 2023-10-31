@@ -1,5 +1,5 @@
 import 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
 import ScoreAndServiceTile from '../score-tile/score-and-service-tile';
@@ -14,6 +14,11 @@ const ScoreContainer = () => {
   const isAwayPlayerServing = () => {
     return gameContextData!.playerServing === gameContextData!.awayPlayerName;
   };
+
+  useEffect(() => {
+    console.log(`home points: ${gameContextData!.homePlayerPoints}`);
+    console.log(`away points: ${gameContextData!.awayPlayerPoints}`);
+  }, [gameContextData]);
 
   return (
     <View

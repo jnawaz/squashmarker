@@ -23,8 +23,8 @@ const ScoringTile = (props: ScoringTileProps) => {
         }}>
         <Text style={{textAlign: 'center', paddingVertical: 24}}>
           {props.isHomePlayerTile
-            ? gameContextData?.homePlayerPoints
-            : gameContextData?.awayPlayerPoints}
+            ? gameContextData!.homePlayerPoints
+            : gameContextData!.awayPlayerPoints}
         </Text>
         {props.isPlayerServing ? (
           <View
@@ -60,8 +60,8 @@ const ScoringTile = (props: ScoringTileProps) => {
           color: ColorDefinitions.white,
         }}>
         {props.isHomePlayerTile
-          ? gameContextData?.homePlayerName
-          : gameContextData?.awayPlayerName}
+          ? gameContextData!.homePlayerName
+          : gameContextData!.awayPlayerName}
       </Text>
     </View>
   );

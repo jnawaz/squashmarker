@@ -12,7 +12,7 @@ import {ServiceBox} from '../../types/service-box/ServiceBox';
 const ServerSelection = () => {
   const {gameContextData, updateGameContextData} = useGameDataContext();
 
-  const isServerDetermined = gameContextData?.isServerDetermined;
+  const isServerDetermined = gameContextData!.isServerDetermined;
 
   function updateServerDetermined() {
     if (gameContextData!.servingFrom && gameContextData!.playerServing) {
@@ -34,8 +34,8 @@ const ServerSelection = () => {
         backgroundColor={ColorDefinitions.green500}
         style={{height: 44}}
         values={[
-          gameContextData?.homePlayerName!!,
-          gameContextData?.awayPlayerName!!,
+          gameContextData!.homePlayerName!!,
+          gameContextData!.awayPlayerName!!,
         ]}
         onValueChange={value => {
           gameContextData!.playerServing = value;
@@ -51,7 +51,7 @@ const ServerSelection = () => {
         style={{height: 44, marginTop: 16}}
         values={['Left Box', 'Right Box']}
         onValueChange={value => {
-          if (value === ServiceBox.Left) {
+          if (value === 'Left Box') {
             gameContextData!.servingFrom = ServiceBox.Left;
           } else {
             gameContextData!.servingFrom = ServiceBox.Right;
