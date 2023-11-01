@@ -15,10 +15,7 @@ const ScoreContainer = () => {
     return gameContextData!.playerServing === gameContextData!.awayPlayerName;
   };
 
-  useEffect(() => {
-    console.log(`home points: ${gameContextData!.homePlayerPoints}`);
-    console.log(`away points: ${gameContextData!.awayPlayerPoints}`);
-  }, [gameContextData]);
+  useEffect(() => {}, [gameContextData]);
 
   return (
     <View

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, Text} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
@@ -9,11 +9,10 @@ import {ColorDefinitions} from '../../colors/Colors';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import ServerSelection from '../../components/ServerSelection/ServerSelection';
 import ScoringToolKit from '../../components/ScoringToolKit/ScoringToolKit';
+import Timer from "../../components/Timer/Timer";
 
 const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
-  // const [gameData, setGameData] = useState<GameData>(route.params?.gameData);
-
-  const {gameContextData, updateGameContextData} = useGameDataContext();
+  const {gameContextData} = useGameDataContext();
 
   useEffect(() => {
     const scoringElement = () => {
@@ -33,18 +32,10 @@ const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
     });
   }, [navigation, gameContextData]);
 
-  //TODO: handle tied score logic
   return (
     <SafeAreaView style={[GlobalStyles.screenBackground]}>
       <ScrollView>
-        <Text
-          style={{
-            textAlign: 'center',
-            marginTop: 24,
-            color: ColorDefinitions.white,
-          }}>
-          34m: 20s
-        </Text>
+        <Timer />
         <ScoreContainer />
         <ServerSelection />
         <ScoringToolKit />
