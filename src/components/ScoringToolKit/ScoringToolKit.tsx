@@ -3,6 +3,8 @@ import ScoringButton from '../ScoringButtons/ScoringButton';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {GameData} from '../../types/game-data/GameData';
+import PrimaryButton from '../PrimaryButton/PrimaryButton';
+import {View} from 'react-native';
 
 const ScoringToolKit = () => {
   const {gameContextData, updateGameContextData} = useGameDataContext();
@@ -60,6 +62,13 @@ const ScoringToolKit = () => {
         }}
         title={'Handout'}
       />
+      <View style={{marginHorizontal: 16}}>
+        <PrimaryButton
+          text={'Reset match'}
+          onPress={() => {}}
+          disabled={false}
+        />
+      </View>
     </>
   );
 };
