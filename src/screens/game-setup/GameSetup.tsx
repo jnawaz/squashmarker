@@ -11,7 +11,6 @@ import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {GameData} from '../../types/game-data/GameData';
 import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import {Typography} from '../../Typography/Typography';
@@ -29,23 +28,11 @@ import {
   activeControlFont,
   segmentControlFont,
 } from '../../components/SharedStyles/SegmentStyle';
+import {GameData} from '../../types/game-data/GameData';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
-  const [gameData, setGameData] = useState<GameData>({
-    isServerDetermined: false,
-    homePlayerPoints: 0,
-    awayPlayerPoints: 0,
-    currentGame: 1,
-    servingFrom: undefined,
-    playerServing: undefined,
-    awayPlayerGamesWon: 0,
-    awayPlayerName: undefined,
-    bestOfGames: undefined,
-    homePlayerGamesWon: 0,
-    homePlayerName: undefined,
-    pointsPerGame: undefined,
-    scoringSystem: undefined,
-  });
+  const {gameContextData, updateGameContextData} = useGameDataContext();
+
   const englishScoringMethodSegments: Array<string> = ['English', 'American'];
   const [currentScoringMethodIndex, setCurrentScoringMethodIndex] = useState(0);
 
@@ -54,61 +41,38 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
 
   const americanPointsPerGameSegments: Array<string> = ['To 11', 'To 15'];
   const [americanCurrentPointsPerGame, setAmericanCurrentPointsPerGame] =
-    useState(0);
+    useState<PointsPerGame>(PointsPerGame.PointsTo11);
 
   const englishPointsPerGameSegment: Array<string> = ['To 9'];
   const [englishCurrentPointsPerGame, setEnglishCurrentPointsPerGame] =
-    useState(0);
-
-  const isScoringTo15 = () => {
-    return gameData?.pointsPerGame === PointsPerGame.PointsTo15;
-  };
-
-  const americanTo15 = () => {
-    return isAmericanScoring() && isScoringTo15();
-  };
-
-  const isEnglishScoring = () => {
-    return gameData?.scoringSystem === ScoringMethod.EnglishScoring;
-  };
-
-  function isScoringTo11() {
-    return gameData?.pointsPerGame === PointsPerGame.PointsTo11;
-  }
-
-  const americanTo11 = () => {
-    return isAmericanScoring() && isScoringTo11();
-  };
-
-  const isAmericanScoring = () => {
-    return gameData?.scoringSystem === ScoringMethod.AmericanScoring;
-  };
+    useState<PointsPerGame>(PointsPerGame.PointsTo9);
 
   const playerNamesFilledIn = () => {
-    return gameData?.homePlayerName !== '' && gameData?.awayPlayerName !== '';
+    return (
+      gameContextData!.homePlayerName !== '' &&
+      gameContextData!.awayPlayerName !== ''
+    );
   };
 
   const canStartGame = () => {
-    switch (gameData?.scoringSystem) {
+    switch (gameContextData?.scoringSystem) {
       case ScoringMethod.AmericanScoring:
         return (
           playerNamesFilledIn() &&
-          (gameData!!.bestOfGames === BestOfGames.BestOf3 ||
-            gameData!!.bestOfGames === BestOfGames.BestOf5) &&
-          (gameData!!.pointsPerGame === PointsPerGame.PointsTo11 ||
-            gameData!!.pointsPerGame === PointsPerGame.PointsTo15)
+          (gameContextData?.bestOfGames === BestOfGames.BestOf3 ||
+            gameContextData?.bestOfGames === BestOfGames.BestOf5) &&
+          (gameContextData?.pointsPerGame === PointsPerGame.PointsTo11 ||
+            gameContextData?.pointsPerGame === PointsPerGame.PointsTo15)
         );
       case ScoringMethod.EnglishScoring:
         return (
           playerNamesFilledIn() &&
-          (gameData!!.bestOfGames === BestOfGames.BestOf3 ||
-            gameData!!.bestOfGames === BestOfGames.BestOf5) &&
-          gameData!!.pointsPerGame === PointsPerGame.PointsTo9
+          (gameContextData?.bestOfGames === BestOfGames.BestOf3 ||
+            gameContextData?.bestOfGames === BestOfGames.BestOf5) &&
+          gameContextData?.pointsPerGame === PointsPerGame.PointsTo9
         );
     }
   };
-
-  const {gameContextData, updateGameContextData} = useGameDataContext();
 
   return (
     <SafeAreaView
@@ -127,18 +91,14 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             placeholderTextColor={ColorDefinitions.white}
             placeholder={'Home Player'}
             onChangeText={updatedName => {
-              console.log(updatedName);
-              setGameData(prevState => {
+              updateGameContextData((gameContextData: GameData) => {
                 return {
-                  ...prevState,
+                  ...gameContextData,
                   homePlayerName: updatedName,
                 };
               });
-              console.log(`gameData: ${gameData}`);
-              updateGameContextData(gameData);
-              console.log(`gameContextData: ${gameContextData}`);
             }}
-            value={gameData?.homePlayerName}
+            value={gameContextData?.homePlayerName}
           />
           <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
             Away Player
@@ -149,15 +109,14 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             placeholderTextColor={ColorDefinitions.white}
             placeholder={'Away Player'}
             onChangeText={updatedName => {
-              setGameData(prevState => {
+              updateGameContextData(gameData => {
                 return {
-                  ...prevState,
+                  ...gameData,
                   awayPlayerName: updatedName,
                 };
               });
-              updateGameContextData(gameData);
             }}
-            value={gameData?.awayPlayerName}
+            value={gameContextData?.awayPlayerName}
           />
         </KeyboardAvoidingView>
 
@@ -187,15 +146,17 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 setCurrentScoringMethodIndex(1);
                 scoringMethod = ScoringMethod.AmericanScoring;
                 pointsPerGame = PointsPerGame.PointsTo11;
+                setAmericanCurrentPointsPerGame(pointsPerGame);
               } else {
                 setCurrentScoringMethodIndex(0);
                 scoringMethod = ScoringMethod.EnglishScoring;
+                setEnglishCurrentPointsPerGame(PointsPerGame.PointsTo9);
                 pointsPerGame = PointsPerGame.PointsTo9;
               }
 
-              setGameData(prevState => {
+              updateGameContextData(gameData => {
                 return {
-                  ...prevState,
+                  ...gameData,
                   scoringSystem: scoringMethod,
                   pointsPerGame: pointsPerGame,
                 };
@@ -222,18 +183,18 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             values={bestOfSegments}
             selectedIndex={currentBestOf}
             onValueChange={value => {
+              console.log(`${value}`);
               let selectedBestOfGames: BestOfGames;
-              if (value == 'Best of 3') {
-                setCurrentBestOf(0);
+              if (value === 'Best of 3') {
                 selectedBestOfGames = BestOfGames.BestOf3;
+                console.log(`${selectedBestOfGames}`);
               } else {
-                setCurrentBestOf(1);
                 selectedBestOfGames = BestOfGames.BestOf5;
               }
 
-              setGameData(prevState => {
+              updateGameContextData(gameData => {
                 return {
-                  ...prevState,
+                  ...gameData,
                   bestOfGames: selectedBestOfGames,
                 };
               });
@@ -260,8 +221,19 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 ? englishPointsPerGameSegment
                 : americanPointsPerGameSegments
             }
-            selectedIndex={currentScoringMethodIndex}
+            selectedIndex={
+              currentScoringMethodIndex === 0 ? 0 : americanCurrentPointsPerGame
+            }
             backgroundColor={ColorDefinitions.green500}
+            onValueChange={value => {
+              if (value === 'To 11') {
+                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo11);
+              } else if (value === 'To 15') {
+                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo15);
+              } else {
+                setEnglishCurrentPointsPerGame(PointsPerGame.PointsTo9);
+              }
+            }}
           />
         </View>
         <View>
@@ -269,24 +241,14 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
-              setGameData(prevState => {
+              updateGameContextData(gameData => {
                 return {
-                  ...prevState,
+                  ...gameData,
                   homePlayerPoints: 0,
                   awayPlayerPoints: 0,
                 };
               });
-              updateGameContextData(gameData);
-              // updateGameContextData(prevValue => {
-              //   return {
-              //     ...prevValue,
-              //     homePlayerPoints: 0,
-              //     awayPlayerPoints: 0,
-              //   };
-              // });
-              navigation.navigate(AppRoutes.Scoring, {
-                gameData,
-              });
+              navigation.navigate(AppRoutes.Scoring);
             }}
           />
         </View>

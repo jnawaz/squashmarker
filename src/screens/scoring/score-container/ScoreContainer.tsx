@@ -2,7 +2,7 @@ import 'react-native';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
-import ScoreAndServiceTile from '../score-tile/score-and-service-tile';
+import ScoringTile from '../score-tile/ScoreAndServiceTile';
 import {useGameDataContext} from '../../../contexts/GameDataContext';
 
 const ScoreContainer = () => {
@@ -30,11 +30,11 @@ const ScoreContainer = () => {
         marginTop: 24,
         gap: 24,
       }}>
-      <ScoreAndServiceTile
+      <ScoringTile
         isHomePlayerTile={true}
         isPlayerServing={isHomePlayerServing()}
       />
-      <ScoreAndServiceTile
+      <ScoringTile
         isHomePlayerTile={false}
         isPlayerServing={isAwayPlayerServing()}
       />

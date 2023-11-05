@@ -47,7 +47,6 @@ export const GameDataContextProvider: React.FC<MyContextProviderProps> = ({
 }) => {
   const [gameContextData, setGameData] = useState<GameData | null>(null);
   const updateGameContextData = (newData: GameData) => {
-    console.log(`newGameData: ${newData}`);
     setGameData(newData);
   };
 
