@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   KeyboardAvoidingView,
   SafeAreaView,
@@ -47,6 +47,11 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [englishCurrentPointsPerGame, setEnglishCurrentPointsPerGame] =
     useState<PointsPerGame>(PointsPerGame.PointsTo9);
 
+  const [americanPointsSelectedIndex, setAmericanPointsSelectedIndex] =
+    useState(0);
+  const [englishPointsSelectedIndex, setEnglishPointsSelectedIndex] =
+    useState(0);
+
   const playerNamesFilledIn = () => {
     return (
       gameContextData!.homePlayerName !== '' &&
@@ -55,6 +60,10 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   };
 
   const canStartGame = () => {
+    console.log(`Scoring Method: ${gameContextData?.scoringSystem}`);
+    console.log(`PPG: ${gameContextData?.pointsPerGame}`);
+    console.log(`BoG: ${gameContextData?.bestOfGames}`);
+
     switch (gameContextData?.scoringSystem) {
       case ScoringMethod.AmericanScoring:
         return (
@@ -73,6 +82,19 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
         );
     }
   };
+
+  useEffect(() => {
+    updateGameContextData(gameData => {
+      return {
+        ...gameData,
+        scoringSystem: ScoringMethod.EnglishScoring,
+        pointsPerGame: PointsPerGame.PointsTo9,
+        bestOfGames: BestOfGames.BestOf3,
+        homePlayerGamesWon: 0,
+        awayPlayerGamesWon: 0,
+      };
+    });
+  }, []);
 
   return (
     <SafeAreaView
@@ -140,25 +162,27 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             selectedIndex={currentScoringMethodIndex}
             onValueChange={value => {
               let scoringMethod: ScoringMethod;
-              let pointsPerGame: PointsPerGame;
 
               if (value === 'American') {
                 setCurrentScoringMethodIndex(1);
                 scoringMethod = ScoringMethod.AmericanScoring;
-                pointsPerGame = PointsPerGame.PointsTo11;
-                setAmericanCurrentPointsPerGame(pointsPerGame);
+                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo11);
+                setAmericanPointsSelectedIndex(0);
+                updateGameContextData(gameData => {
+                  return {
+                    ...gameData,
+                    pointsPerGame: PointsPerGame.PointsTo11,
+                  };
+                });
               } else {
                 setCurrentScoringMethodIndex(0);
                 scoringMethod = ScoringMethod.EnglishScoring;
-                setEnglishCurrentPointsPerGame(PointsPerGame.PointsTo9);
-                pointsPerGame = PointsPerGame.PointsTo9;
               }
 
               updateGameContextData(gameData => {
                 return {
                   ...gameData,
                   scoringSystem: scoringMethod,
-                  pointsPerGame: pointsPerGame,
                 };
               });
             }}
@@ -183,7 +207,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             values={bestOfSegments}
             selectedIndex={currentBestOf}
             onValueChange={value => {
-              console.log(`${value}`);
               let selectedBestOfGames: BestOfGames;
               if (value === 'Best of 3') {
                 selectedBestOfGames = BestOfGames.BestOf3;
@@ -222,16 +245,36 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 : americanPointsPerGameSegments
             }
             selectedIndex={
-              currentScoringMethodIndex === 0 ? 0 : americanCurrentPointsPerGame
+              gameContextData?.scoringSystem === ScoringMethod.AmericanScoring
+                ? americanPointsSelectedIndex
+                : englishPointsSelectedIndex
             }
             backgroundColor={ColorDefinitions.green500}
             onValueChange={value => {
               if (value === 'To 11') {
                 setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo11);
+                updateGameContextData(gameData => {
+                  return {
+                    ...gameData,
+                    pointsPerGame: PointsPerGame.PointsTo11,
+                  };
+                });
               } else if (value === 'To 15') {
                 setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo15);
+                updateGameContextData(gameData => {
+                  return {
+                    ...gameData,
+                    pointsPerGame: PointsPerGame.PointsTo15,
+                  };
+                });
               } else {
                 setEnglishCurrentPointsPerGame(PointsPerGame.PointsTo9);
+                updateGameContextData(gameData => {
+                  return {
+                    ...gameData,
+                    pointsPerGame: PointsPerGame.PointsTo9,
+                  };
+                });
               }
             }}
           />

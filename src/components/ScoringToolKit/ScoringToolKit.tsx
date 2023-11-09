@@ -87,6 +87,8 @@ const ScoringToolKit = () => {
             return {
               ...gameData,
               awayPlayerGamesWon: (gameData.homePlayerGamesWon! += 1),
+              homePlayerPoints: 0,
+              awayPlayerPoints: 0,
             };
           });
         }
