@@ -22,6 +22,7 @@ interface GameDataContextType {
       scoringSystem: ScoringMethod | undefined;
       servingFrom: ServiceBox | undefined;
       pointsPerGame: PointsPerGame | undefined;
+      resetMatch: () => void;
     },
   ) => void;
 }

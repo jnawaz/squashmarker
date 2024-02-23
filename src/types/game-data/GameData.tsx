@@ -3,7 +3,6 @@ import {PointsPerGame} from '../points-per-game/PointsPerGame';
 import {ScoringMethod} from '../scoring/ScoringMethod';
 import {ServiceBox} from '../service-box/ServiceBox';
 
-
 export type GameData = {
   homePlayerName: string | undefined;
   awayPlayerName: string | undefined;
@@ -18,4 +17,5 @@ export type GameData = {
   servingFrom: ServiceBox | undefined;
   playerServing: string | undefined;
   isServerDetermined: boolean;
+  resetMatch: () => void;
 };

@@ -8,8 +8,11 @@ import {View} from 'react-native';
 import {ServiceBox} from '../../types/service-box/ServiceBox';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import {BestOfGames} from '../../types/games/BestOfGames';
+import {useNavigation} from '@react-navigation/native';
+import {styles} from './ScoringToolkit.style';
 
 const ScoringToolKit = () => {
+  const navigation = useNavigation();
   const {gameContextData, updateGameContextData} = useGameDataContext();
 
   const hasWonGame = () => {
@@ -35,6 +38,7 @@ const ScoringToolKit = () => {
             };
           });
         }
+        break;
       }
       case PointsPerGame.PointsTo11: {
         //TODO: implement decider
@@ -92,6 +96,7 @@ const ScoringToolKit = () => {
             };
           });
         }
+        break;
       }
     }
   };
@@ -104,6 +109,7 @@ const ScoringToolKit = () => {
         } else if (gameContextData!.awayPlayerGamesWon === 2) {
           console.log(`${gameContextData!.awayPlayerName} has won`);
         }
+        break;
       }
       case BestOfGames.BestOf5: {
         if (gameContextData!.homePlayerGamesWon === 3) {
@@ -111,6 +117,7 @@ const ScoringToolKit = () => {
         } else if (gameContextData!.awayPlayerGamesWon === 3) {
           console.log(`${gameContextData!.awayPlayerName} has won`);
         }
+        break;
       }
     }
   };
@@ -204,10 +211,12 @@ const ScoringToolKit = () => {
         }}
         title={'Handout'}
       />
-      <View style={{marginHorizontal: 16}}>
+      <View style={styles.resetButtonMargin}>
         <PrimaryButton
           text={'Reset match'}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.goBack();
+          }}
           disabled={false}
         />
       </View>

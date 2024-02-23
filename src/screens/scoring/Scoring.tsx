@@ -4,7 +4,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {ServiceBox} from '../../types/service-box/ServiceBox';
 import ScoreContainer from './score-container/ScoreContainer';
-import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
+import {GlobalStyles} from '../../global-styles/GlobalStyles';
 import {ColorDefinitions} from '../../colors/Colors';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import ServerSelection from '../../components/ServerSelection/ServerSelection';

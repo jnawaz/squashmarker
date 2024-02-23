@@ -1,8 +1,21 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ColorDefinitions} from '../../colors/Colors';
 import {Text} from 'react-native';
 
 const Timer = () => {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(seconds => seconds + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
   return (
     <>
       <Text
@@ -11,7 +24,7 @@ const Timer = () => {
           marginTop: 24,
           color: ColorDefinitions.white,
         }}>
-        34m: 20s
+        {minutes < 10 ? '0' + minutes : minutes}:{remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}
       </Text>
     </>
   );

@@ -11,16 +11,16 @@ import {ScoringMethod} from '../../types/scoring/ScoringMethod';
 import {BestOfGames} from '../../types/games/BestOfGames';
 import {PointsPerGame} from '../../types/points-per-game/PointsPerGame';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {GlobalStyles} from '../../GlobalStyles/GlobalStyles';
+import {GlobalStyles} from '../../global-styles/GlobalStyles';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import {Typography} from '../../Typography/Typography';
+import {Typography} from '../../typography/Typography';
 import {ColorDefinitions, Colors} from '../../colors/Colors';
 import {style} from './GameSetup.style';
 import {
   VerticalPadding,
   VerticalPaddingBottom,
   VerticalPaddingTop,
-} from '../../Layout/Padding';
+} from '../../layout/Padding';
 import {AppRoutes} from '../../routes/AppRoutes';
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
 import {useGameDataContext} from '../../contexts/GameDataContext';
