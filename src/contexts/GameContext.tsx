@@ -29,6 +29,8 @@ interface GameDataContextType {
   setScoringMethod: (scoringMethod: ScoringMethod) => void;
   setBestOfGames: (bestOfGames: BestOfGames) => void;
   setPointsPerGame: (pointsPerGame: PointsPerGame) => void;
+  setServer: (name: string) => void;
+  setServingFrom: (serviceBox: ServiceBox) => void;
   incrementHomePlayerScore: () => void;
   incrementAwayPlayerScore: () => void;
   incrementHomePlayerGamesWon: () => void;
@@ -100,6 +102,20 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
     }));
   };
 
+  const setServer = (name: string) => {
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      playerServing: name,
+    }));
+  };
+
+  const setServingFrom = (serviceBox: ServiceBox) => {
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      servingFrom: serviceBox,
+    }));
+  };
+
   const incrementHomePlayerScore = () => {
     setGameData({
       ...gameData,
@@ -162,6 +178,8 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
         setScoringMethod,
         setBestOfGames,
         setPointsPerGame,
+        setServer,
+        setServingFrom,
         incrementHomePlayerScore,
         incrementAwayPlayerScore,
         incrementHomePlayerGamesWon,

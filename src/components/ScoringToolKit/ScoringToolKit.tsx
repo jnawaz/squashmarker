@@ -75,8 +75,8 @@ const ScoringToolKit = () => {
       <ScoringButton
         onTap={() => {
           if (isAmericanScoring()) {
-            incrementScore();
-            switchServiceSide();
+            // incrementScore();
+            // switchServiceSide();
           } else {
             handout();
           }

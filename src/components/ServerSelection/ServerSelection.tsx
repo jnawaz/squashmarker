@@ -10,13 +10,14 @@ import {ServiceBox} from '../../types/service-box/ServiceBox';
 import {useGameData} from '../../contexts/GameContext';
 
 const ServerSelection = () => {
-  const {data} = useGameData();
+  const {data, setServer, setServingFrom} = useGameData();
 
-  const isServerDetermined = data.isServerDetermined;
+  const isServerDetermined = data.playerServing !== undefined;
   const isServiceBoxDetermined = data.servingFrom !== undefined;
 
   const updateServerDetermined = () => {
     if (data.servingFrom && data.playerServing) {
+
     }
   };
 
@@ -37,7 +38,7 @@ const ServerSelection = () => {
           style={{height: 44}}
           values={[data.homePlayerName, data.awayPlayerName]}
           onValueChange={value => {
-            updateServerDetermined();
+            setServer(value);
           }}
         />
       ) : null}
@@ -51,13 +52,11 @@ const ServerSelection = () => {
           style={{height: 44, marginTop: 16}}
           values={['Left Box', 'Right Box']}
           onValueChange={value => {
-            var servingFromBox: ServiceBox;
             if (value === 'Left Box') {
-              // servingFromBox = ServiceBox.Left;
+              setServingFrom(ServiceBox.Left);
             } else {
-              // servingFromBox = ServiceBox.Right;
+              setServingFrom(ServiceBox.Right);
             }
-            updateServerDetermined();
           }}
         />
       ) : null}

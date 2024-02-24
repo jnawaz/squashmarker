@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {useGameDataContext} from '../../contexts/GameDataContext';
 import {ColorDefinitions} from '../../colors/Colors';
-import { useGameData } from '../../contexts/GameContext';
+import {useGameData} from '../../contexts/GameContext';
 
 export type ScoringButtonProps = {
   title: string;

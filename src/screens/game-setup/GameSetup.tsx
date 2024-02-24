@@ -59,7 +59,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   };
 
   const canStartGame = () => {
-    console.log('data', data);
     switch (data.scoringSystem) {
       case ScoringMethod.AmericanScoring:
         const canStart =
@@ -68,11 +67,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             data.bestOfGames === BestOfGames.BestOf5) &&
           (data.pointsPerGame === PointsPerGame.PointsTo11 ||
             data.pointsPerGame === PointsPerGame.PointsTo15);
-
-        console.log('canStart', canStart);
-        console.log('playerNamesFilledIn', playerNamesFilledIn());
-        console.log('bestOfGames', data.bestOfGames);
-        console.log('pointsPerGame', data.pointsPerGame);
         return canStart;
 
       case ScoringMethod.EnglishScoring:
