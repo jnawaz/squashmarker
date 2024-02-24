@@ -1,9 +1,9 @@
-import {useGameDataContext} from '../../../contexts/GameDataContext';
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
 import {ServiceBox} from '../../../types/service-box/ServiceBox';
 import {style} from './ScoreAndServiceTile.style';
+import {useGameData} from '../../../contexts/GameContext';
 
 export type ScoringTileProps = {
   isHomePlayerTile: boolean;
@@ -11,9 +11,8 @@ export type ScoringTileProps = {
 };
 
 const ScoringTile = (props: ScoringTileProps) => {
-  const {gameContextData} = useGameDataContext();
-
-  useEffect(() => {}, [gameContextData]);
+  const {data} = useGameData();
+  useEffect(() => {}, [data]);
 
   return (
     <View style={style.container}>
@@ -27,24 +26,22 @@ const ScoringTile = (props: ScoringTileProps) => {
             fontSize: 24,
           }}>
           {props.isHomePlayerTile
-            ? gameContextData!.homePlayerPoints
-            : gameContextData!.awayPlayerPoints}
+            ? data.homePlayerPoints
+            : data.awayPlayerPoints}
         </Text>
         {props.isPlayerServing ? (
           <View style={style.serviceIndicatorContainer}>
             <Text style={style.serviceBoxIndicatorText}>
-              {gameContextData!.servingFrom === ServiceBox.Left ? 'L' : ''}
+              {data.servingFrom === ServiceBox.Left ? 'L' : ''}
             </Text>
             <Text style={style.serviceBoxIndicatorText}>
-              {gameContextData!.servingFrom === ServiceBox.Right ? 'R' : ''}
+              {data.servingFrom === ServiceBox.Right ? 'R' : ''}
             </Text>
           </View>
         ) : null}
       </View>
       <Text style={style.playerNameBelowScoreBox}>
-        {props.isHomePlayerTile
-          ? gameContextData!.homePlayerName
-          : gameContextData!.awayPlayerName}
+        {props.isHomePlayerTile ? data.homePlayerName : data.awayPlayerName}
       </Text>
     </View>
   );

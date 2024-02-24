@@ -2,31 +2,25 @@ import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {ColorDefinitions} from '../../colors/Colors';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import {useGameDataContext} from '../../contexts/GameDataContext';
 import {
   activeControlFont,
   segmentControlFont,
 } from '../SharedStyles/SegmentStyle';
 import {ServiceBox} from '../../types/service-box/ServiceBox';
+import {useGameData} from '../../contexts/GameContext';
 
 const ServerSelection = () => {
-  const {gameContextData, updateGameContextData} = useGameDataContext();
+  const {data} = useGameData();
 
-  const isServerDetermined = gameContextData!.isServerDetermined;
-  const isServiceBoxDetermined = gameContextData?.servingFrom !== undefined;
+  const isServerDetermined = data.isServerDetermined;
+  const isServiceBoxDetermined = data.servingFrom !== undefined;
 
   const updateServerDetermined = () => {
-    if (gameContextData!.servingFrom && gameContextData!.playerServing) {
-      updateGameContextData(gameData => {
-        return {
-          ...gameData,
-          isServerDetermined: true,
-        };
-      });
+    if (data.servingFrom && data.playerServing) {
     }
   };
 
-  useEffect(() => {}, [gameContextData, isServiceBoxDetermined]);
+  useEffect(() => {}, [data, isServiceBoxDetermined]);
 
   return (
     <View
@@ -41,18 +35,8 @@ const ServerSelection = () => {
           activeFontStyle={activeControlFont}
           backgroundColor={ColorDefinitions.green500}
           style={{height: 44}}
-          values={[
-            gameContextData!.homePlayerName!!,
-            gameContextData!.awayPlayerName!!,
-          ]}
+          values={[data.homePlayerName, data.awayPlayerName]}
           onValueChange={value => {
-            updateGameContextData(gameData => {
-              return {
-                ...gameData,
-                playerServing: value,
-                isServerDetermined: true,
-              };
-            });
             updateServerDetermined();
           }}
         />
@@ -69,16 +53,10 @@ const ServerSelection = () => {
           onValueChange={value => {
             var servingFromBox: ServiceBox;
             if (value === 'Left Box') {
-              servingFromBox = ServiceBox.Left;
+              // servingFromBox = ServiceBox.Left;
             } else {
-              servingFromBox = ServiceBox.Right;
+              // servingFromBox = ServiceBox.Right;
             }
-            updateGameContextData(gameData => {
-              return {
-                ...gameData,
-                servingFrom: servingFromBox,
-              };
-            });
             updateServerDetermined();
           }}
         />

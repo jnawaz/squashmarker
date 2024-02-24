@@ -1,25 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, ScrollView, Text} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ScoringMethod} from '../../types/scoring/ScoringMethod';
-import {ServiceBox} from '../../types/service-box/ServiceBox';
 import ScoreContainer from './score-container/ScoreContainer';
 import {GlobalStyles} from '../../global-styles/GlobalStyles';
-import {ColorDefinitions} from '../../colors/Colors';
-import {useGameDataContext} from '../../contexts/GameDataContext';
 import ServerSelection from '../../components/ServerSelection/ServerSelection';
 import ScoringToolKit from '../../components/ScoringToolKit/ScoringToolKit';
-import Timer from "../../components/Timer/Timer";
+import Timer from '../../components/Timer/Timer';
+import {useGameData} from '../../contexts/GameContext';
 
 const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
-  const {gameContextData} = useGameDataContext();
+  // const {gameContextData} = useGameDataC();
+  const {data} = useGameData();
 
   useEffect(() => {
     const scoringElement = () => {
       return (
         <Text>
-          {gameContextData!.homePlayerGamesWon ?? 0} -{' '}
-          {gameContextData?.awayPlayerGamesWon ?? 0}
+          {data.homePlayerGamesWon ?? 0} - {data.awayPlayerGamesWon ?? 0}
         </Text>
       );
     };
@@ -30,7 +27,7 @@ const Scoring = ({navigation}: NativeStackScreenProps<any>) => {
         return scoringElement();
       },
     });
-  }, [navigation, gameContextData]);
+  }, [navigation, data]);
 
   return (
     <SafeAreaView style={[GlobalStyles.screenBackground]}>

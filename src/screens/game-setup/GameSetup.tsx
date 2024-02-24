@@ -23,78 +23,68 @@ import {
 } from '../../layout/Padding';
 import {AppRoutes} from '../../routes/AppRoutes';
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton';
-import {useGameDataContext} from '../../contexts/GameDataContext';
 import {
   activeControlFont,
   segmentControlFont,
 } from '../../components/SharedStyles/SegmentStyle';
-import {GameData} from '../../types/game-data/GameData';
+import {useGameData} from '../../contexts/GameContext';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
-  const {gameContextData, updateGameContextData} = useGameDataContext();
+  const {
+    data,
+    setHomePlayerName,
+    setAwayPlayerName,
+    setScoringMethod,
+    setBestOfGames,
+    setPointsPerGame,
+  } = useGameData();
 
   const englishScoringMethodSegments: Array<string> = ['English', 'American'];
-  const [currentScoringMethodIndex, setCurrentScoringMethodIndex] = useState(0);
+  const [currentScoringMethodIndex] = useState(0);
 
   const bestOfSegments: Array<string> = ['Best of 3', 'Best of 5'];
-  const [currentBestOf, setCurrentBestOf] = useState(0);
+  const [currentBestOf] = useState(0);
 
   const americanPointsPerGameSegments: Array<string> = ['To 11', 'To 15'];
-  const [americanCurrentPointsPerGame, setAmericanCurrentPointsPerGame] =
-    useState<PointsPerGame>(PointsPerGame.PointsTo11);
 
   const englishPointsPerGameSegment: Array<string> = ['To 9'];
-  const [englishCurrentPointsPerGame, setEnglishCurrentPointsPerGame] =
-    useState<PointsPerGame>(PointsPerGame.PointsTo9);
 
-  const [americanPointsSelectedIndex, setAmericanPointsSelectedIndex] =
-    useState(0);
-  const [englishPointsSelectedIndex, setEnglishPointsSelectedIndex] =
-    useState(0);
+  const [americanPointsSelectedIndex] = useState(0);
+  const [englishPointsSelectedIndex] = useState(0);
 
   const playerNamesFilledIn = () => {
-    return (
-      gameContextData!.homePlayerName !== '' &&
-      gameContextData!.awayPlayerName !== ''
-    );
+    console.log('homePlayerName', data.homePlayerName);
+    console.log('awayPlayerName', data.awayPlayerName);
+    return data.homePlayerName !== '' && data.awayPlayerName !== '';
   };
 
   const canStartGame = () => {
-    console.log(`Scoring Method: ${gameContextData?.scoringSystem}`);
-    console.log(`PPG: ${gameContextData?.pointsPerGame}`);
-    console.log(`BoG: ${gameContextData?.bestOfGames}`);
-
-    switch (gameContextData?.scoringSystem) {
+    console.log('data', data);
+    switch (data.scoringSystem) {
       case ScoringMethod.AmericanScoring:
-        return (
+        const canStart =
           playerNamesFilledIn() &&
-          (gameContextData?.bestOfGames === BestOfGames.BestOf3 ||
-            gameContextData?.bestOfGames === BestOfGames.BestOf5) &&
-          (gameContextData?.pointsPerGame === PointsPerGame.PointsTo11 ||
-            gameContextData?.pointsPerGame === PointsPerGame.PointsTo15)
-        );
+          (data.bestOfGames === BestOfGames.BestOf3 ||
+            data.bestOfGames === BestOfGames.BestOf5) &&
+          (data.pointsPerGame === PointsPerGame.PointsTo11 ||
+            data.pointsPerGame === PointsPerGame.PointsTo15);
+
+        console.log('canStart', canStart);
+        console.log('playerNamesFilledIn', playerNamesFilledIn());
+        console.log('bestOfGames', data.bestOfGames);
+        console.log('pointsPerGame', data.pointsPerGame);
+        return canStart;
+
       case ScoringMethod.EnglishScoring:
-        return (
+        const canStartEnglish =
           playerNamesFilledIn() &&
-          (gameContextData?.bestOfGames === BestOfGames.BestOf3 ||
-            gameContextData?.bestOfGames === BestOfGames.BestOf5) &&
-          gameContextData?.pointsPerGame === PointsPerGame.PointsTo9
-        );
+          data.bestOfGames != null &&
+          data.pointsPerGame === PointsPerGame.PointsTo9;
+        return canStartEnglish;
     }
   };
 
-  useEffect(() => {
-    updateGameContextData(gameData => {
-      return {
-        ...gameData,
-        scoringSystem: ScoringMethod.EnglishScoring,
-        pointsPerGame: PointsPerGame.PointsTo9,
-        bestOfGames: BestOfGames.BestOf3,
-        homePlayerGamesWon: 0,
-        awayPlayerGamesWon: 0,
-      };
-    });
-  }, []);
+  useEffect(() => {}, [data]);
 
   return (
     <SafeAreaView
@@ -113,14 +103,9 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             placeholderTextColor={ColorDefinitions.white}
             placeholder={'Home Player'}
             onChangeText={updatedName => {
-              updateGameContextData((gameContextData: GameData) => {
-                return {
-                  ...gameContextData,
-                  homePlayerName: updatedName,
-                };
-              });
+              setHomePlayerName(updatedName);
             }}
-            value={gameContextData?.homePlayerName}
+            value={data.homePlayerName}
           />
           <Text style={[Typography.h3, Colors.green, VerticalPadding.s]}>
             Away Player
@@ -131,14 +116,9 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             placeholderTextColor={ColorDefinitions.white}
             placeholder={'Away Player'}
             onChangeText={updatedName => {
-              updateGameContextData(gameData => {
-                return {
-                  ...gameData,
-                  awayPlayerName: updatedName,
-                };
-              });
+              setAwayPlayerName(updatedName);
             }}
-            value={gameContextData?.awayPlayerName}
+            value={data.awayPlayerName}
           />
         </KeyboardAvoidingView>
 
@@ -161,30 +141,11 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             values={englishScoringMethodSegments}
             selectedIndex={currentScoringMethodIndex}
             onValueChange={value => {
-              let scoringMethod: ScoringMethod;
-
               if (value === 'American') {
-                setCurrentScoringMethodIndex(1);
-                scoringMethod = ScoringMethod.AmericanScoring;
-                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo11);
-                setAmericanPointsSelectedIndex(0);
-                updateGameContextData(gameData => {
-                  return {
-                    ...gameData,
-                    pointsPerGame: PointsPerGame.PointsTo11,
-                  };
-                });
+                setScoringMethod(ScoringMethod.AmericanScoring);
               } else {
-                setCurrentScoringMethodIndex(0);
-                scoringMethod = ScoringMethod.EnglishScoring;
+                setScoringMethod(ScoringMethod.EnglishScoring);
               }
-
-              updateGameContextData(gameData => {
-                return {
-                  ...gameData,
-                  scoringSystem: scoringMethod,
-                };
-              });
             }}
           />
         </View>
@@ -207,20 +168,11 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             values={bestOfSegments}
             selectedIndex={currentBestOf}
             onValueChange={value => {
-              let selectedBestOfGames: BestOfGames;
               if (value === 'Best of 3') {
-                selectedBestOfGames = BestOfGames.BestOf3;
-                console.log(`${selectedBestOfGames}`);
+                setBestOfGames(BestOfGames.BestOf3);
               } else {
-                selectedBestOfGames = BestOfGames.BestOf5;
+                setBestOfGames(BestOfGames.BestOf5);
               }
-
-              updateGameContextData(gameData => {
-                return {
-                  ...gameData,
-                  bestOfGames: selectedBestOfGames,
-                };
-              });
             }}
           />
         </View>
@@ -240,41 +192,23 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             activeFontStyle={activeControlFont}
             style={{height: 44}}
             values={
-              currentScoringMethodIndex === 0
+              data.scoringSystem === ScoringMethod.EnglishScoring
                 ? englishPointsPerGameSegment
                 : americanPointsPerGameSegments
             }
             selectedIndex={
-              gameContextData?.scoringSystem === ScoringMethod.AmericanScoring
+              data.scoringSystem === ScoringMethod.AmericanScoring
                 ? americanPointsSelectedIndex
                 : englishPointsSelectedIndex
             }
             backgroundColor={ColorDefinitions.green500}
             onValueChange={value => {
               if (value === 'To 11') {
-                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo11);
-                updateGameContextData(gameData => {
-                  return {
-                    ...gameData,
-                    pointsPerGame: PointsPerGame.PointsTo11,
-                  };
-                });
+                setPointsPerGame(PointsPerGame.PointsTo11);
               } else if (value === 'To 15') {
-                setAmericanCurrentPointsPerGame(PointsPerGame.PointsTo15);
-                updateGameContextData(gameData => {
-                  return {
-                    ...gameData,
-                    pointsPerGame: PointsPerGame.PointsTo15,
-                  };
-                });
+                setPointsPerGame(PointsPerGame.PointsTo15);
               } else {
-                setEnglishCurrentPointsPerGame(PointsPerGame.PointsTo9);
-                updateGameContextData(gameData => {
-                  return {
-                    ...gameData,
-                    pointsPerGame: PointsPerGame.PointsTo9,
-                  };
-                });
+                setPointsPerGame(PointsPerGame.PointsTo9);
               }
             }}
           />
@@ -284,13 +218,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             disabled={!canStartGame()}
             text={'Start game'}
             onPress={() => {
-              updateGameContextData(gameData => {
-                return {
-                  ...gameData,
-                  homePlayerPoints: 0,
-                  awayPlayerPoints: 0,
-                };
-              });
               navigation.navigate(AppRoutes.Scoring);
             }}
           />

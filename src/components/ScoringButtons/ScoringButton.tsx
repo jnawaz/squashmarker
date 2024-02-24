@@ -2,18 +2,21 @@ import React, {useEffect} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import {useGameDataContext} from '../../contexts/GameDataContext';
 import {ColorDefinitions} from '../../colors/Colors';
+import { useGameData } from '../../contexts/GameContext';
 
 export type ScoringButtonProps = {
   title: string;
   onTap: () => void;
 };
 const ScoringButton = (props: ScoringButtonProps) => {
-  const {gameContextData} = useGameDataContext();
+  // const {gameContextData} = useGameDataContext();
 
-  const isServerDetermined = gameContextData!.isServerDetermined;
-  const isServiceBoxDetermined = gameContextData!.servingFrom !== undefined;
+  const {data} = useGameData();
 
-  useEffect(() => {}, [gameContextData]);
+  const isServerDetermined = data.isServerDetermined;
+  const isServiceBoxDetermined = data.servingFrom !== undefined;
+
+  useEffect(() => {}, [data]);
 
   return (
     <>

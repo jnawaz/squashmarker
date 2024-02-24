@@ -3,19 +3,20 @@ import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {ColorDefinitions} from '../../../colors/Colors';
 import ScoringTile from '../score-tile/ScoreAndServiceTile';
-import {useGameDataContext} from '../../../contexts/GameDataContext';
+import {useGameData} from '../../../contexts/GameContext';
 
 const ScoreContainer = () => {
-  const {gameContextData} = useGameDataContext();
+  const {data} = useGameData();
+
   const isHomePlayerServing = () => {
-    return gameContextData!.playerServing === gameContextData!.homePlayerName;
+    return data.playerServing === data.homePlayerName;
   };
 
   const isAwayPlayerServing = () => {
-    return gameContextData!.playerServing === gameContextData!.awayPlayerName;
+    return data.playerServing === data.awayPlayerName;
   };
 
-  useEffect(() => {}, [gameContextData]);
+  useEffect(() => {}, [data]);
 
   return (
     <View
