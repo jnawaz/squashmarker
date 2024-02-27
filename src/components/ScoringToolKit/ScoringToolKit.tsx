@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useContext, useEffect} from 'react';
 import ScoringButton from '../ScoringButtons/ScoringButton';
 import PrimaryButton from '../PrimaryButton/PrimaryButton';
 import {View} from 'react-native';
@@ -15,6 +15,10 @@ const ScoringToolKit = () => {
     incrementHomePlayerScore,
     incrementAwayPlayerScore,
     switchServiceSide,
+    incrementGamesWon,
+    hasWonGame,
+    resetScores,
+    handout,
   } = useGameData();
 
   const incrementScore = () => {
@@ -31,12 +35,13 @@ const ScoringToolKit = () => {
     <>
       <ScoringButton
         onTap={() => {
-          if (data.playerServing === data.homePlayerName) {
-            incrementHomePlayerScore();
-          } else {
-            incrementAwayPlayerScore();
-          }
+          incrementScore();
           switchServiceSide();
+          if (hasWonGame()) {
+            incrementGamesWon();
+            resetScores();
+          }
+          console.log('data', data);
         }}
         title={'+1'}
       />
@@ -50,7 +55,7 @@ const ScoringToolKit = () => {
       <ScoringButton onTap={() => {}} title={'Let'} />
       <ScoringButton
         onTap={() => {
-          // handout();
+          handout();
         }}
         title={'Handout'}
       />

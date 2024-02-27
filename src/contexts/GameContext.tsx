@@ -1,5 +1,5 @@
-import React, {ReactNode, useContext} from 'react';
-import {FC, createContext, useState} from 'react';
+import React, {ReactNode, useContext, valueOf} from 'react';
+import {createContext, useState} from 'react';
 import {BestOfGames} from '../types/games/BestOfGames';
 import {PointsPerGame} from '../types/points-per-game/PointsPerGame';
 import {ScoringMethod} from '../types/scoring/ScoringMethod';
@@ -8,9 +8,9 @@ import {ServiceBox} from '../types/service-box/ServiceBox';
 interface GameData {
   homePlayerName: string | undefined;
   awayPlayerName: string | undefined;
-  homePlayerGamesWon: number | undefined;
-  awayPlayerGamesWon: number | undefined;
-  currentGame: number | undefined;
+  homePlayerGamesWon: number;
+  awayPlayerGamesWon: number;
+  currentGame: number;
   homePlayerPoints: number;
   awayPlayerPoints: number;
   bestOfGames: BestOfGames | undefined;
@@ -34,8 +34,11 @@ interface GameDataContextType {
   incrementAwayPlayerScore: () => void;
   incrementHomePlayerGamesWon: () => void;
   incrementAwayPlayerGamesWon: () => void;
+  incrementGamesWon: () => void;
   handout: () => void;
+  hasWonGame: () => boolean;
   switchServiceSide: () => void;
+  resetScores: () => void;
   resetMatch: () => void;
 }
 
@@ -116,43 +119,44 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
   };
 
   const incrementHomePlayerScore = () => {
-    setGameData({
-      ...gameData,
-      homePlayerPoints: (gameData.homePlayerPoints += 1),
-    });
-    hasWonGame();
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      homePlayerPoints: (prevGameData.homePlayerPoints += 1),
+    }));
   };
 
   const incrementAwayPlayerScore = () => {
-    setGameData({
-      ...gameData,
-      awayPlayerPoints: (gameData.awayPlayerPoints += 1),
-    });
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      awayPlayerPoints: (prevGameData.awayPlayerPoints += 1),
+    }));
   };
 
   const incrementHomePlayerGamesWon = () => {
-    setGameData({
-      ...gameData,
-      homePlayerGamesWon: gameData.homePlayerGamesWon! + 1,
-    });
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      homePlayerGamesWon: prevGameData.homePlayerGamesWon + 1,
+      servingFrom: undefined,
+    }));
   };
 
   const incrementAwayPlayerGamesWon = () => {
-    setGameData({
-      ...gameData,
-      awayPlayerGamesWon: gameData.awayPlayerGamesWon! + 1,
-    });
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      awayPlayerGamesWon: prevGameData.awayPlayerGamesWon + 1,
+      servingFrom: undefined,
+    }));
   };
 
   const handout = () => {
-    setGameData({
-      ...gameData,
+    setGameData(prevGameData => ({
+      ...prevGameData,
       playerServing:
-        gameData.playerServing === gameData.homePlayerName
-          ? gameData.awayPlayerName
-          : gameData.homePlayerName,
+        prevGameData.playerServing === prevGameData.homePlayerName
+          ? prevGameData.awayPlayerName
+          : prevGameData.homePlayerName,
       servingFrom: undefined,
-    });
+    }));
   };
 
   const resetMatch = () => {
@@ -169,28 +173,46 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
     });
   };
 
-  const hasWonGame = () => {
+  const resetScores = () => {
+    setGameData(prevGameData => ({
+      ...prevGameData,
+      homePlayerPoints: 0,
+      awayPlayerPoints: 0,
+    }));
+  };
+
+  const hasWonGame = (): boolean => {
     switch (gameData.scoringSystem) {
       case ScoringMethod.AmericanScoring:
         switch (gameData.pointsPerGame) {
           case PointsPerGame.PointsTo11:
-            if (gameData.awayPlayerPoints === 11) {
-              incrementAwayPlayerGamesWon();
-            } else if (gameData.homePlayerPoints === 11) {
-              incrementHomePlayerGamesWon();
+            if (
+              gameData.awayPlayerPoints >= 11 ||
+              gameData.homePlayerPoints >= 11
+            ) {
+              return true;
             }
             break;
           case PointsPerGame.PointsTo15:
-            if (gameData.awayPlayerPoints === 15) {
-              incrementAwayPlayerGamesWon();
-            } else if (gameData.homePlayerPoints === 15) {
-              incrementHomePlayerGamesWon();
+            if (
+              gameData.homePlayerPoints >= 15 ||
+              gameData.awayPlayerPoints >= 15
+            ) {
+              return true;
             }
-            break;
         }
         break;
       case ScoringMethod.EnglishScoring:
         break;
+    }
+    return false;
+  };
+
+  const incrementGamesWon = () => {
+    if (gameData.playerServing === gameData.homePlayerName) {
+      incrementHomePlayerGamesWon();
+    } else {
+      incrementAwayPlayerGamesWon();
     }
   };
 
@@ -211,6 +233,9 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
         incrementAwayPlayerGamesWon,
         handout,
         switchServiceSide,
+        hasWonGame,
+        incrementGamesWon,
+        resetScores,
         resetMatch,
       }}>
       {children}

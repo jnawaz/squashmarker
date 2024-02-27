@@ -211,6 +211,7 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             text={'Start game'}
             onPress={() => {
               navigation.navigate(AppRoutes.Scoring);
+              console.log('data', data);
             }}
           />
         </View>
