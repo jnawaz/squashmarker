@@ -4,7 +4,6 @@ import {BestOfGames} from '../types/games/BestOfGames';
 import {PointsPerGame} from '../types/points-per-game/PointsPerGame';
 import {ScoringMethod} from '../types/scoring/ScoringMethod';
 import {ServiceBox} from '../types/service-box/ServiceBox';
-import Scoring from '../screens/scoring/Scoring';
 
 interface GameData {
   homePlayerName: string | undefined;
@@ -12,8 +11,8 @@ interface GameData {
   homePlayerGamesWon: number | undefined;
   awayPlayerGamesWon: number | undefined;
   currentGame: number | undefined;
-  homePlayerPoints: number | undefined;
-  awayPlayerPoints: number | undefined;
+  homePlayerPoints: number;
+  awayPlayerPoints: number;
   bestOfGames: BestOfGames | undefined;
   pointsPerGame: PointsPerGame | undefined;
   scoringSystem: ScoringMethod | undefined;
@@ -119,14 +118,15 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
   const incrementHomePlayerScore = () => {
     setGameData({
       ...gameData,
-      homePlayerPoints: gameData.homePlayerPoints! + 1,
+      homePlayerPoints: (gameData.homePlayerPoints += 1),
     });
+    hasWonGame();
   };
 
   const incrementAwayPlayerScore = () => {
     setGameData({
       ...gameData,
-      awayPlayerPoints: gameData.awayPlayerPoints! + 1,
+      awayPlayerPoints: (gameData.awayPlayerPoints += 1),
     });
   };
 
@@ -167,6 +167,31 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
           ? ServiceBox.Right
           : ServiceBox.Left,
     });
+  };
+
+  const hasWonGame = () => {
+    switch (gameData.scoringSystem) {
+      case ScoringMethod.AmericanScoring:
+        switch (gameData.pointsPerGame) {
+          case PointsPerGame.PointsTo11:
+            if (gameData.awayPlayerPoints === 11) {
+              incrementAwayPlayerGamesWon();
+            } else if (gameData.homePlayerPoints === 11) {
+              incrementHomePlayerGamesWon();
+            }
+            break;
+          case PointsPerGame.PointsTo15:
+            if (gameData.awayPlayerPoints === 15) {
+              incrementAwayPlayerGamesWon();
+            } else if (gameData.homePlayerPoints === 15) {
+              incrementHomePlayerGamesWon();
+            }
+            break;
+        }
+        break;
+      case ScoringMethod.EnglishScoring:
+        break;
+    }
   };
 
   return (

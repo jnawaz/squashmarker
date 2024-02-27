@@ -53,8 +53,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const [englishPointsSelectedIndex] = useState(0);
 
   const playerNamesFilledIn = () => {
-    console.log('homePlayerName', data.homePlayerName);
-    console.log('awayPlayerName', data.awayPlayerName);
     return data.homePlayerName !== '' && data.awayPlayerName !== '';
   };
 

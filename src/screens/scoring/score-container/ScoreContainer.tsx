@@ -1,9 +1,9 @@
 import 'react-native';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {ColorDefinitions} from '../../../colors/Colors';
 import ScoringTile from '../score-tile/ScoreAndServiceTile';
 import {useGameData} from '../../../contexts/GameContext';
+import {styles} from './ScoreContainer.style';
 
 const ScoreContainer = () => {
   const {data} = useGameData();
@@ -19,18 +19,7 @@ const ScoreContainer = () => {
   useEffect(() => {}, [data]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: ColorDefinitions.green600,
-        marginHorizontal: 16,
-        padding: 24,
-        borderRadius: 12,
-        marginTop: 24,
-        gap: 24,
-      }}>
+    <View style={styles.container}>
       <ScoringTile
         isHomePlayerTile={true}
         isPlayerServing={isHomePlayerServing()}

@@ -12,14 +12,11 @@ const ScoringButton = (props: ScoringButtonProps) => {
 
   const {data} = useGameData();
 
-  const isServerDetermined = data.isServerDetermined;
-  const isServiceBoxDetermined = data.servingFrom !== undefined;
-
   useEffect(() => {}, [data]);
 
   return (
     <>
-      {isServerDetermined && isServiceBoxDetermined ? (
+      {data.playerServing && data.servingFrom ? (
         <TouchableOpacity
           style={{
             backgroundColor: ColorDefinitions.green500,

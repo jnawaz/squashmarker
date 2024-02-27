@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
-import {ColorDefinitions} from '../../../colors/Colors';
 import {ServiceBox} from '../../../types/service-box/ServiceBox';
 import {style} from './ScoreAndServiceTile.style';
 import {useGameData} from '../../../contexts/GameContext';
@@ -17,14 +16,7 @@ const ScoringTile = (props: ScoringTileProps) => {
   return (
     <View style={style.container}>
       <View style={style.scoreAndServiceContainer}>
-        <Text
-          style={{
-            textAlign: 'center',
-            paddingVertical: 24,
-            color: ColorDefinitions.white,
-            fontFamily: 'TitilliumWeb-SemiBold',
-            fontSize: 24,
-          }}>
+        <Text style={style.score}>
           {props.isHomePlayerTile
             ? data.homePlayerPoints
             : data.awayPlayerPoints}
