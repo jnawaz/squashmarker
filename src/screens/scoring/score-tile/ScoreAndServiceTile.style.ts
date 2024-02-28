@@ -25,4 +25,11 @@ export const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  score: {
+    textAlign: 'center',
+    paddingVertical: 24,
+    color: ColorDefinitions.white,
+    fontFamily: 'TitilliumWeb-SemiBold',
+    fontSize: 24,
+  },
 });

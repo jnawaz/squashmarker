@@ -10,13 +10,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GameSetup from './src/screens/game-setup/GameSetup';
 import Scoring from './src/screens/scoring/Scoring';
-import {GameDataContextProvider} from './src/contexts/GameDataContext';
+import {GameDataProvider} from './src/contexts/GameContext';
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   return (
-    <GameDataContextProvider>
+    <GameDataProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -41,7 +41,7 @@ function App(): JSX.Element {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </GameDataContextProvider>
+    </GameDataProvider>
   );
 }
 
