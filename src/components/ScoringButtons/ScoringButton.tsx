@@ -8,8 +8,6 @@ export type ScoringButtonProps = {
   onTap: () => void;
 };
 const ScoringButton = (props: ScoringButtonProps) => {
-  // const {gameContextData} = useGameDataContext();
-
   const {data} = useGameData();
 
   useEffect(() => {}, [data]);

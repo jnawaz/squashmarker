@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   KeyboardAvoidingView,
   SafeAreaView,
@@ -27,7 +27,7 @@ import {
   activeControlFont,
   segmentControlFont,
 } from '../../components/SharedStyles/SegmentStyle';
-import {useGameData} from '../../contexts/GameContext';
+import {initialData, useGameData} from '../../contexts/GameContext';
 
 const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   const {
@@ -40,10 +40,10 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
   } = useGameData();
 
   const englishScoringMethodSegments: Array<string> = ['English', 'American'];
-  const [currentScoringMethodIndex] = useState(0);
+  const [currentScoringMethodIndex, setCurrentScoringMethodIndex] = useState(0);
 
   const bestOfSegments: Array<string> = ['Best of 3', 'Best of 5'];
-  const [currentBestOf] = useState(0);
+  const [currentBestOf, setCurrentBestOf] = useState(0);
 
   const americanPointsPerGameSegments: Array<string> = ['To 11', 'To 15'];
 
@@ -76,7 +76,14 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
     }
   };
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    if (data === initialData) {
+      console.log('setting defaults');
+      setCurrentScoringMethodIndex(0);
+      setCurrentBestOf(0);
+      setPointsPerGame(PointsPerGame.PointsTo9);
+    }
+  }, [data, setBestOfGames, setPointsPerGame, setScoringMethod]);
 
   return (
     <SafeAreaView
@@ -132,12 +139,15 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             style={{height: 44}}
             values={englishScoringMethodSegments}
             selectedIndex={currentScoringMethodIndex}
-            onValueChange={value => {
-              if (value === 'American') {
-                setScoringMethod(ScoringMethod.AmericanScoring);
-              } else {
-                setScoringMethod(ScoringMethod.EnglishScoring);
-              }
+            onChange={event => {
+              setCurrentScoringMethodIndex(
+                event.nativeEvent.selectedSegmentIndex,
+              );
+              setScoringMethod(
+                event.nativeEvent.selectedSegmentIndex === 0
+                  ? ScoringMethod.EnglishScoring
+                  : ScoringMethod.AmericanScoring,
+              );
             }}
           />
         </View>
@@ -159,12 +169,13 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             style={{height: 44}}
             values={bestOfSegments}
             selectedIndex={currentBestOf}
-            onValueChange={value => {
-              if (value === 'Best of 3') {
-                setBestOfGames(BestOfGames.BestOf3);
-              } else {
-                setBestOfGames(BestOfGames.BestOf5);
-              }
+            onChange={event => {
+              setCurrentBestOf(event.nativeEvent.selectedSegmentIndex);
+              setBestOfGames(
+                event.nativeEvent.selectedSegmentIndex === 0
+                  ? BestOfGames.BestOf3
+                  : BestOfGames.BestOf5,
+              );
             }}
           />
         </View>
@@ -194,11 +205,13 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
                 : englishPointsSelectedIndex
             }
             backgroundColor={ColorDefinitions.green500}
-            onValueChange={value => {
-              if (value === 'To 11') {
-                setPointsPerGame(PointsPerGame.PointsTo11);
-              } else if (value === 'To 15') {
-                setPointsPerGame(PointsPerGame.PointsTo15);
+            onChange={event => {
+              if (data.scoringSystem === ScoringMethod.AmericanScoring) {
+                if (event.nativeEvent.selectedSegmentIndex === 0) {
+                  setPointsPerGame(PointsPerGame.PointsTo11);
+                } else {
+                  setPointsPerGame(PointsPerGame.PointsTo15);
+                }
               } else {
                 setPointsPerGame(PointsPerGame.PointsTo9);
               }
@@ -211,7 +224,6 @@ const GameSetup = ({navigation}: NativeStackScreenProps<any>) => {
             text={'Start game'}
             onPress={() => {
               navigation.navigate(AppRoutes.Scoring);
-              console.log('data', data);
             }}
           />
         </View>
