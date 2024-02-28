@@ -41,7 +41,6 @@ const ScoringToolKit = () => {
             incrementGamesWon();
             resetScores();
           }
-          console.log('data', data);
         }}
         title={'+1'}
       />
@@ -49,6 +48,10 @@ const ScoringToolKit = () => {
         onTap={() => {
           incrementScore();
           switchServiceSide();
+          if (hasWonGame()) {
+            incrementGamesWon();
+            resetScores();
+          }
         }}
         title={'Stroke'}
       />

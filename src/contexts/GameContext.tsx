@@ -149,6 +149,13 @@ export const GameDataProvider: React.FC<GameDataProviderProps> = ({
   };
 
   const handout = () => {
+    if (gameData.scoringSystem === ScoringMethod.AmericanScoring) {
+      if (gameData.playerServing === gameData.homePlayerName) {
+        incrementAwayPlayerScore();
+      } else {
+        incrementHomePlayerScore();
+      }
+    }
     setGameData(prevGameData => ({
       ...prevGameData,
       playerServing:
